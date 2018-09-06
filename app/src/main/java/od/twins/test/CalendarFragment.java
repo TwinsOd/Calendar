@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
@@ -32,7 +33,8 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
     private ScheduleAdapter mScheduleAdapter;
     private RelativeLayout rLNoTask;
     private int mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay;
-
+    private TextView monthView;
+    private String[] mMonthText;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -59,6 +61,9 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
 //        searchViewById(R.id.ibMainOk).setOnClickListener(this);
         initScheduleList();
 //        initBottomInputBar();
+        monthView = searchViewById(R.id.month_view);
+        mMonthText = getResources().getStringArray(R.array.calendar_month);
+
     }
 
     private void initScheduleList() {
@@ -100,7 +105,7 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
     @Override
     public void onClickDate(int year, int month, int day) {
 //        Toast.makeText(mActivity, "onClickDate: Day is " + day, Toast.LENGTH_SHORT).show();
-//        setCurrentSelectDate(year, month, day);
+        setCurrentSelectDate(year, month, day);
 //        resetScheduleList();
     }
 
@@ -113,6 +118,7 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
         mCurrentSelectYear = year;
         mCurrentSelectMonth = month;
         mCurrentSelectDay = day;
+        monthView.setText(mMonthText[month]);
 //        if (mActivity instanceof MainActivity) {
 //            ((MainActivity) mActivity).resetMainTitleDate(year, month, day);
 //        }
