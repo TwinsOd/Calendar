@@ -2,11 +2,10 @@ package com.jeek.calendar.widget.calendar.week;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -29,31 +28,31 @@ public class WeekView extends View {
 
     private static final int NUM_COLUMNS = 7;
     private Paint mPaint;
-    private Paint mLunarPaint;
+    //    private Paint mLunarPaint;
     private int mNormalDayColor;
     private int mSelectDayColor;
     private int mSelectBGColor;
     private int mSelectBGTodayColor;
     private int mCurrentDayColor;
     private int mHintCircleColor;
-    private int mLunarTextColor;
-    private int mHolidayTextColor;
+    //    private int mLunarTextColor;
+//    private int mHolidayTextColor;
     private int mCurrYear, mCurrMonth, mCurrDay;
     private int mSelYear, mSelMonth, mSelDay;
     private int mColumnSize, mRowSize, mSelectCircleSize;
     private int mDaySize;
-    private int mLunarTextSize;
+    //    private int mLunarTextSize;
     private int mCircleRadius = 6;
-    private int[] mHolidays;
-    private String mHolidayOrLunarText[];
-    private boolean mIsShowLunar;
+    //    private int[] mHolidays;
+//    private String mHolidayOrLunarText[];
+//    private boolean mIsShowLunar;
     private boolean mIsShowHint;
-    private boolean mIsShowHolidayHint;
+    //    private boolean mIsShowHolidayHint;
     private DateTime mStartDate;
     private DisplayMetrics mDisplayMetrics;
     private OnWeekClickListener mOnWeekClickListener;
     private GestureDetector mGestureDetector;
-    private Bitmap mRestBitmap, mWorkBitmap;
+//    private Bitmap mRestBitmap, mWorkBitmap;
 
     public WeekView(Context context, DateTime dateTime) {
         this(context, null, dateTime);
@@ -92,13 +91,13 @@ public class WeekView extends View {
             mNormalDayColor = array.getColor(R.styleable.WeekCalendarView_week_normal_text_color, Color.parseColor("#575471"));
             mCurrentDayColor = array.getColor(R.styleable.WeekCalendarView_week_today_text_color, Color.parseColor("#FF8594"));
             mHintCircleColor = array.getColor(R.styleable.WeekCalendarView_week_hint_circle_color, Color.parseColor("#FE8595"));
-            mLunarTextColor = array.getColor(R.styleable.WeekCalendarView_week_lunar_text_color, Color.parseColor("#ACA9BC"));
-            mHolidayTextColor = array.getColor(R.styleable.WeekCalendarView_week_holiday_color, Color.parseColor("#A68BFF"));
+//            mLunarTextColor = array.getColor(R.styleable.WeekCalendarView_week_lunar_text_color, Color.parseColor("#ACA9BC"));
+//            mHolidayTextColor = array.getColor(R.styleable.WeekCalendarView_week_holiday_color, Color.parseColor("#A68BFF"));
             mDaySize = array.getInteger(R.styleable.WeekCalendarView_week_day_text_size, 13);
-            mLunarTextSize = array.getInteger(R.styleable.WeekCalendarView_week_day_lunar_text_size, 8);
+//            mLunarTextSize = array.getInteger(R.styleable.WeekCalendarView_week_day_lunar_text_size, 8);
             mIsShowHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_task_hint, true);
-            mIsShowLunar = array.getBoolean(R.styleable.WeekCalendarView_week_show_lunar, true);
-            mIsShowHolidayHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_holiday_hint, true);
+//            mIsShowLunar = array.getBoolean(R.styleable.WeekCalendarView_week_show_lunar, true);
+//            mIsShowHolidayHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_holiday_hint, true);
         } else {
             mSelectDayColor = Color.parseColor("#FFFFFF");
             mSelectBGColor = Color.parseColor("#E8E8E8");
@@ -106,21 +105,21 @@ public class WeekView extends View {
             mNormalDayColor = Color.parseColor("#575471");
             mCurrentDayColor = Color.parseColor("#FF8594");
             mHintCircleColor = Color.parseColor("#FE8595");
-            mLunarTextColor = Color.parseColor("#ACA9BC");
-            mHolidayTextColor = Color.parseColor("#A68BFF");
+//            mLunarTextColor = Color.parseColor("#ACA9BC");
+//            mHolidayTextColor = Color.parseColor("#A68BFF");
             mDaySize = 13;
             mDaySize = 8;
             mIsShowHint = true;
-            mIsShowLunar = true;
-            mIsShowHolidayHint = true;
+//            mIsShowLunar = true;
+//            mIsShowHolidayHint = true;
         }
         mStartDate = dateTime;
-        mRestBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_rest_day);
-        mWorkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_work_day);
-        int holidays[] = CalendarUtils.getInstance(getContext()).getHolidays(mStartDate.getYear(), mStartDate.getMonthOfYear());
-        int row = CalendarUtils.getWeekRow(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1, mStartDate.getDayOfMonth());
-        mHolidays = new int[7];
-        System.arraycopy(holidays, row * 7, mHolidays, 0, mHolidays.length);
+//        mRestBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_rest_day);
+//        mWorkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_work_day);
+//        int holidays[] = CalendarUtils.getInstance(getContext()).getHolidays(mStartDate.getYear(), mStartDate.getMonthOfYear());
+//        int row = CalendarUtils.getWeekRow(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1, mStartDate.getDayOfMonth());
+//        mHolidays = new int[7];
+//        System.arraycopy(holidays, row * 7, mHolidays, 0, mHolidays.length);
     }
 
     private void initPaint() {
@@ -129,11 +128,12 @@ public class WeekView extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setTextSize(mDaySize * mDisplayMetrics.scaledDensity);
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-        mLunarPaint = new Paint();
-        mLunarPaint.setAntiAlias(true);
-        mLunarPaint.setTextSize(mLunarTextSize * mDisplayMetrics.scaledDensity);
-        mLunarPaint.setColor(mLunarTextColor);
+//        mLunarPaint = new Paint();
+//        mLunarPaint.setAntiAlias(true);
+//        mLunarPaint.setTextSize(mLunarTextSize * mDisplayMetrics.scaledDensity);
+//        mLunarPaint.setColor(mLunarTextColor);
     }
 
     private void initWeek() {
@@ -207,7 +207,7 @@ public class WeekView extends View {
     }
 
     private void clearData() {
-        mHolidayOrLunarText = new String[7];
+//        mHolidayOrLunarText = new String[7];
     }
 
     private void initSize() {
@@ -246,7 +246,7 @@ public class WeekView extends View {
                 mPaint.setColor(mNormalDayColor);
             }
             canvas.drawText(dayString, startX, startY, mPaint);
-            mHolidayOrLunarText[i] = CalendarUtils.getHolidayFromSolar(date.getYear(), date.getMonthOfYear() - 1, day);
+//            mHolidayOrLunarText[i] = CalendarUtils.getHolidayFromSolar(date.getYear(), date.getMonthOfYear() - 1, day);
         }
         return selected;
     }
