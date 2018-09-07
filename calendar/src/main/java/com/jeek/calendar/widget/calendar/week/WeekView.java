@@ -155,8 +155,8 @@ public class WeekView extends View {
         } else {
             setSelectYearMonth(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1, mStartDate.getDayOfMonth());
         }
-        initTaskHint(mStartDate);
-        initTaskHint(endDate);
+//        initTaskHint(mStartDate);
+//        initTaskHint(endDate);
     }
 
     private void initGestureDetector() {

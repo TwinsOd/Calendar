@@ -159,11 +159,11 @@ public class MonthView extends View {
         mCurrYear = calendar.get(Calendar.YEAR);
         mCurrMonth = calendar.get(Calendar.MONTH);
         mCurrDay = calendar.get(Calendar.DATE);
-//        if (mSelYear == mCurrYear && mSelMonth == mCurrMonth) {
-//            setSelectYearMonth(mSelYear, mSelMonth, mCurrDay);
-//        } else {
-//            setSelectYearMonth(mSelYear, mSelMonth, 1);
-//        }
+        if (mSelYear == mCurrYear && mSelMonth == mCurrMonth) {
+            setSelectYearMonth(mSelYear, mSelMonth, mCurrDay);
+        } else {
+            setSelectYearMonth(mSelYear, mSelMonth, 1);
+        }
     }
 
     @Override
