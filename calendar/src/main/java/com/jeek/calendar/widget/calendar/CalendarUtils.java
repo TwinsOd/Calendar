@@ -2,12 +2,6 @@ package com.jeek.calendar.widget.calendar;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -21,31 +15,31 @@ import java.util.Map;
 public class CalendarUtils {
 
     private static CalendarUtils sUtils;
-    private Map<String, int[]> sAllHolidays = new HashMap<>();
+    //    private Map<String, int[]> sAllHolidays = new HashMap<>();
     private Map<String, List<Integer>> sMonthTaskHint = new HashMap<>();
 
     public static synchronized CalendarUtils getInstance(Context context) {
         if (sUtils == null) {
             sUtils = new CalendarUtils();
-            sUtils.initAllHolidays(context);
+//            sUtils.initAllHolidays(context);
         }
         return sUtils;
     }
 
-    private void initAllHolidays(Context context) {
-        try {
-            InputStream is = context.getAssets().open("holiday.json");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int i;
-            while ((i = is.read()) != -1) {
-                baos.write(i);
-            }
-            sAllHolidays = new Gson().fromJson(baos.toString(), new TypeToken<Map<String, int[]>>() {
-            }.getType());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void initAllHolidays(Context context) {
+//        try {
+//            InputStream is = context.getAssets().open("holiday.json");
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            int i;
+//            while ((i = is.read()) != -1) {
+//                baos.write(i);
+//            }
+//            sAllHolidays = new Gson().fromJson(baos.toString(), new TypeToken<Map<String, int[]>>() {
+//            }.getType());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public List<Integer> addTaskHints(int year, int month, List<Integer> days) {
         String key = hashKey(year, month);
@@ -268,18 +262,18 @@ public class CalendarUtils {
         return message;
     }
 
-    public int[] getHolidays(int year, int month) {
-        int holidays[];
-        if (sUtils.sAllHolidays != null) {
-            holidays = sUtils.sAllHolidays.get(year + "" + month);
-            if (holidays == null) {
-                holidays = new int[42];
-            }
-        } else {
-            holidays = new int[42];
-        }
-        return holidays;
-    }
+//    public int[] getHolidays(int year, int month) {
+//        int holidays[];
+//        if (sUtils.sAllHolidays != null) {
+//            holidays = sUtils.sAllHolidays.get(year + "" + month);
+//            if (holidays == null) {
+//                holidays = new int[42];
+//            }
+//        } else {
+//            holidays = new int[42];
+//        }
+//        return holidays;
+//    }
 
     public static int getMonthRows(int year, int month) {
         int size = getFirstDayWeek(year, month) + getMonthDays(year, month) - 1;
