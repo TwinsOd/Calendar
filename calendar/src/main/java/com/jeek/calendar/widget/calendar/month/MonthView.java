@@ -30,6 +30,7 @@ public class MonthView extends View {
     //    private Paint mLunarPaint;
     private int mNormalDayColor;
     private int mSelectDayColor;
+    private int mSelectNowDayColor;
     private int mSelectBGColor;
     private int mSelectBGTodayColor;
     private int mCurrentDayColor;
@@ -115,6 +116,7 @@ public class MonthView extends View {
             mIsShowHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_task_hint, true);
 //            mIsShowLunar = array.getBoolean(R.styleable.MonthCalendarView_month_show_lunar, true);
 //            mIsShowHolidayHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_holiday_hint, true);
+            mSelectNowDayColor = array.getColor(R.styleable.MonthCalendarView_month_last_or_next_month_text_color, Color.parseColor("#0073AE"));
         } else {
             mSelectDayColor = Color.parseColor("#FFFFFF");
             mSelectBGColor = Color.parseColor("#E8E8E8");
@@ -129,6 +131,7 @@ public class MonthView extends View {
             mIsShowHint = true;
 //            mIsShowLunar = true;
 //            mIsShowHolidayHint = true;
+            mSelectNowDayColor = Color.parseColor("#0073AE");
         }
         mSelYear = year;
         mSelMonth = month;
@@ -227,9 +230,8 @@ public class MonthView extends View {
         }
     }
 
-    private int[] drawThisMonth(Canvas canvas) {
+    private void drawThisMonth(Canvas canvas) {
         String dayString;
-        int selectedPoint[] = new int[2];
         int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
         int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
         for (int day = 0; day < monthDays; day++) {
@@ -239,6 +241,7 @@ public class MonthView extends View {
             mDaysText[row][col] = day + 1;
             int startX = (int) (mColumnSize * col + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
+
             if (dayString.equals(String.valueOf(mSelDay))) {
                 int startRecX = mColumnSize * col;
                 int startRecY = mRowSize * row;
@@ -251,20 +254,23 @@ public class MonthView extends View {
                 }
                 canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2, mSelectCircleSize, mPaint);
                 mWeekRow = row + 1;
-            }
-            if (dayString.equals(String.valueOf(mSelDay))) {
-                selectedPoint[0] = row;
-                selectedPoint[1] = col;
+
                 mPaint.setColor(mSelectDayColor);
             } else if (dayString.equals(String.valueOf(mCurrDay)) && mCurrDay != mSelDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
-                mPaint.setColor(mCurrentDayColor);
+                int startRecX = mColumnSize * col;
+                int startRecY = mRowSize * row;
+                int endRecX = startRecX + mColumnSize;
+                int endRecY = startRecY + mRowSize;
+                mPaint.setColor(mSelectNowDayColor);
+
+                canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2, mSelectCircleSize, mPaint);
+
+                mPaint.setColor(mSelectDayColor);
             } else {
                 mPaint.setColor(mNormalDayColor);
             }
             canvas.drawText(dayString, startX, startY, mPaint);
-//            mHolidayOrLunarText[row][col] = CalendarUtils.getHolidayFromSolar(mSelYear, mSelMonth, mDaysText[row][col]);
         }
-        return selectedPoint;
     }
 
     private void drawNextMonth(Canvas canvas) {
