@@ -17,27 +17,27 @@
             android:id="@+id/left_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_left"
             android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_chevron_left" />
 
         <TextView
             android:id="@+id/month_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="month"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:gravity="center"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/right_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_right"
             android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_chevron_right" />
 
     </LinearLayout>
 
@@ -105,13 +105,69 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorBackground">
 
+                <LinearLayout
+                    android:id="@+id/tab_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="#9e9e9e"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_chevron_left" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_chevron_left" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_chevron_left" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="tabs"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_chevron_right" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_chevron_right" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_chevron_right" />
+
+                </LinearLayout>
+
                 <com.jeek.calendar.widget.calendar.schedule.ScheduleRecyclerView
                     android:id="@+id/rvScheduleList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/tab_view"
                     android:orientation="vertical"
                     android:overScrollMode="never"
                     android:paddingTop="6dp" />
