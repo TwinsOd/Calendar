@@ -3,6 +3,7 @@ package com.jeek.calendar.widget.calendar.schedule;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -131,6 +132,9 @@ public class ScheduleLayout extends FrameLayout {
     private OnCalendarClickListener mMonthCalendarClickListener = new OnCalendarClickListener() {
         @Override
         public void onClickDate(int year, int month, int day) {
+            Log.i("ScheduleLayout", "onClickDate, month = " + month);
+            Log.i("ScheduleLayout", "onPageChange, day = " + day);
+
             wcvCalendar.setOnCalendarClickListener(null);
             int weeks = CalendarUtils.getWeeksAgo(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay, year, month, day);
             resetCurrentSelectDate(year, month, day);
@@ -144,6 +148,7 @@ public class ScheduleLayout extends FrameLayout {
 
         @Override
         public void onPageChange(int year, int month, int day) {
+            Log.i("ScheduleLayout", "onPageChange, month = " + month);
             computeCurrentRowsIsSix(year, month);
         }
     };
@@ -591,6 +596,14 @@ public class ScheduleLayout extends FrameLayout {
 
     public int getCurrentSelectDay() {
         return mCurrentSelectDay;
+    }
+
+    public void onLeftMove() {
+        mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() - 1, true);
+    }
+
+    public void onRightMove() {
+        mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() + 1, true);
     }
 
 }

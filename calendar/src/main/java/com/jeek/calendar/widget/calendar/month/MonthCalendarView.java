@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.jeek.calendar.library.R;
@@ -69,10 +70,13 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            Log.i("MonthCalendarView", "onPageScrolled, position = " + position);
         }
 
         @Override
         public void onPageSelected(final int position) {
+            Log.i("MonthCalendarView", "onPageSelected, position = " + position);
+
             MonthView monthView = mMonthAdapter.getViews().get(getCurrentItem());
             if (monthView != null) {
                 monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), monthView.getSelectDay());

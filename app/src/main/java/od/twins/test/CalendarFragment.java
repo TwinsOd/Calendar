@@ -1,8 +1,6 @@
 package od.twins.test;
 
 
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
     private RelativeLayout rLNoTask;
     private int mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay;
     private TextView monthView;
+    private ImageView leftView, rightView;
     private String[] mMonthText;
 
     public CalendarFragment() {
@@ -62,8 +62,21 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
         initScheduleList();
 //        initBottomInputBar();
         monthView = searchViewById(R.id.month_view);
+        leftView = searchViewById(R.id.left_view);
+        leftView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slSchedule.onLeftMove();
+            }
+        });
+        rightView = searchViewById(R.id.right_view);
+        rightView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slSchedule.onRightMove();
+            }
+        });
         mMonthText = getResources().getStringArray(R.array.calendar_month);
-
     }
 
     private void initScheduleList() {
