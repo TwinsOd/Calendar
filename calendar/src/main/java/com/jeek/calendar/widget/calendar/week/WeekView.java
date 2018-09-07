@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -16,7 +15,6 @@ import android.view.View;
 
 import com.jeek.calendar.library.R;
 import com.jeek.calendar.widget.calendar.CalendarUtils;
-import com.jeek.calendar.widget.calendar.LunarCalendarUtils;
 import com.jimmy.common.data.ScheduleDao;
 
 import org.joda.time.DateTime;
@@ -201,10 +199,11 @@ public class WeekView extends View {
     protected void onDraw(Canvas canvas) {
         initSize();
         clearData();
-        int selected = drawThisWeek(canvas);
-        drawLunarText(canvas, selected);
+//        int selected =
+        drawThisWeek(canvas);
+//        drawLunarText(canvas, selected);
         drawHintCircle(canvas);
-        drawHoliday(canvas);
+//        drawHoliday(canvas);
     }
 
     private void clearData() {
@@ -252,77 +251,77 @@ public class WeekView extends View {
         return selected;
     }
 
-    /**
-     * 绘制农历
-     *
-     * @param canvas
-     * @param selected
-     */
-    private void drawLunarText(Canvas canvas, int selected) {
-        if (mIsShowLunar) {
-            LunarCalendarUtils.Lunar lunar = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(mStartDate.getYear(), mStartDate.getMonthOfYear(), mStartDate.getDayOfMonth()));
-            int leapMonth = LunarCalendarUtils.leapMonth(lunar.lunarYear);
-            int days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
-            int day = lunar.lunarDay;
-            for (int i = 0; i < 7; i++) {
-                if (day > days) {
-                    day = 1;
-                    boolean isAdd = true;
-                    if (lunar.lunarMonth == 12) {
-                        lunar.lunarMonth = 1;
-                        lunar.lunarYear = lunar.lunarYear + 1;
-                        isAdd = false;
-                    }
-                    if (lunar.lunarMonth == leapMonth) {
-                        days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
-                    } else {
-                        if (isAdd) {
-                            lunar.lunarMonth++;
-                            days = LunarCalendarUtils.daysInLunarMonth(lunar.lunarYear, lunar.lunarMonth);
-                        }
-                    }
-                }
-                mLunarPaint.setColor(mHolidayTextColor);
-                String dayString = mHolidayOrLunarText[i];
-                if ("".equals(dayString)) {
-                    dayString = LunarCalendarUtils.getLunarHoliday(lunar.lunarYear, lunar.lunarMonth, day);
-                }
-                if ("".equals(dayString)) {
-                    dayString = LunarCalendarUtils.getLunarDayString(day);
-                    mLunarPaint.setColor(mLunarTextColor);
-                }
-                if ("初一".equals(dayString)) {
-                    DateTime curDay = mStartDate.plusDays(i);
-                    LunarCalendarUtils.Lunar chuyi = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(curDay.getYear(), curDay.getMonthOfYear(), curDay.getDayOfMonth()));
-                    dayString = LunarCalendarUtils.getLunarFirstDayString(chuyi.lunarMonth, chuyi.isLeap);
-                }
-                if (i == selected) {
-                    mLunarPaint.setColor(mSelectDayColor);
-                }
-                int startX = (int) (mColumnSize * i + (mColumnSize - mLunarPaint.measureText(dayString)) / 2);
-                int startY = (int) (mRowSize * 0.72 - (mLunarPaint.ascent() + mLunarPaint.descent()) / 2);
-                canvas.drawText(dayString, startX, startY, mLunarPaint);
-                day++;
-            }
-        }
-    }
-
-    private void drawHoliday(Canvas canvas) {
-        if (mIsShowHolidayHint) {
-            Rect rect = new Rect(0, 0, mRestBitmap.getWidth(), mRestBitmap.getHeight());
-            Rect rectF = new Rect();
-            int distance = (int) (mSelectCircleSize / 2.5);
-            for (int i = 0; i < mHolidays.length; i++) {
-                int column = i % 7;
-                rectF.set(mColumnSize * (column + 1) - mRestBitmap.getWidth() - distance, distance, mColumnSize * (column + 1) - distance, mRestBitmap.getHeight() + distance);
-                if (mHolidays[i] == 1) {
-                    canvas.drawBitmap(mRestBitmap, rect, rectF, null);
-                } else if (mHolidays[i] == 2) {
-                    canvas.drawBitmap(mWorkBitmap, rect, rectF, null);
-                }
-            }
-        }
-    }
+//    /**
+//     * 绘制农历
+//     *
+//     * @param canvas
+//     * @param selected
+//     */
+//    private void drawLunarText(Canvas canvas, int selected) {
+//        if (mIsShowLunar) {
+//            LunarCalendarUtils.Lunar lunar = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(mStartDate.getYear(), mStartDate.getMonthOfYear(), mStartDate.getDayOfMonth()));
+//            int leapMonth = LunarCalendarUtils.leapMonth(lunar.lunarYear);
+//            int days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
+//            int day = lunar.lunarDay;
+//            for (int i = 0; i < 7; i++) {
+//                if (day > days) {
+//                    day = 1;
+//                    boolean isAdd = true;
+//                    if (lunar.lunarMonth == 12) {
+//                        lunar.lunarMonth = 1;
+//                        lunar.lunarYear = lunar.lunarYear + 1;
+//                        isAdd = false;
+//                    }
+//                    if (lunar.lunarMonth == leapMonth) {
+//                        days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
+//                    } else {
+//                        if (isAdd) {
+//                            lunar.lunarMonth++;
+//                            days = LunarCalendarUtils.daysInLunarMonth(lunar.lunarYear, lunar.lunarMonth);
+//                        }
+//                    }
+//                }
+//                mLunarPaint.setColor(mHolidayTextColor);
+//                String dayString = mHolidayOrLunarText[i];
+//                if ("".equals(dayString)) {
+//                    dayString = LunarCalendarUtils.getLunarHoliday(lunar.lunarYear, lunar.lunarMonth, day);
+//                }
+//                if ("".equals(dayString)) {
+//                    dayString = LunarCalendarUtils.getLunarDayString(day);
+//                    mLunarPaint.setColor(mLunarTextColor);
+//                }
+//                if ("初一".equals(dayString)) {
+//                    DateTime curDay = mStartDate.plusDays(i);
+//                    LunarCalendarUtils.Lunar chuyi = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(curDay.getYear(), curDay.getMonthOfYear(), curDay.getDayOfMonth()));
+//                    dayString = LunarCalendarUtils.getLunarFirstDayString(chuyi.lunarMonth, chuyi.isLeap);
+//                }
+//                if (i == selected) {
+//                    mLunarPaint.setColor(mSelectDayColor);
+//                }
+//                int startX = (int) (mColumnSize * i + (mColumnSize - mLunarPaint.measureText(dayString)) / 2);
+//                int startY = (int) (mRowSize * 0.72 - (mLunarPaint.ascent() + mLunarPaint.descent()) / 2);
+//                canvas.drawText(dayString, startX, startY, mLunarPaint);
+//                day++;
+//            }
+//        }
+//    }
+//
+//    private void drawHoliday(Canvas canvas) {
+//        if (mIsShowHolidayHint) {
+//            Rect rect = new Rect(0, 0, mRestBitmap.getWidth(), mRestBitmap.getHeight());
+//            Rect rectF = new Rect();
+//            int distance = (int) (mSelectCircleSize / 2.5);
+//            for (int i = 0; i < mHolidays.length; i++) {
+//                int column = i % 7;
+//                rectF.set(mColumnSize * (column + 1) - mRestBitmap.getWidth() - distance, distance, mColumnSize * (column + 1) - distance, mRestBitmap.getHeight() + distance);
+//                if (mHolidays[i] == 1) {
+//                    canvas.drawBitmap(mRestBitmap, rect, rectF, null);
+//                } else if (mHolidays[i] == 2) {
+//                    canvas.drawBitmap(mWorkBitmap, rect, rectF, null);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 绘制圆点提示
