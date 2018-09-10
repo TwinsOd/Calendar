@@ -14,10 +14,8 @@ import android.view.View;
 
 import com.jeek.calendar.library.R;
 import com.jeek.calendar.widget.calendar.CalendarUtils;
-import com.jimmy.common.data.ScheduleDao;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/6 0006.
@@ -49,7 +47,7 @@ public class MonthView extends View {
     //    private int[] mHolidays;
 //    private String[][] mHolidayOrLunarText;
 //    private boolean mIsShowLunar;
-    private boolean mIsShowHint;
+//    private boolean mIsShowHint;
     //    private boolean mIsShowHolidayHint;
     private DisplayMetrics mDisplayMetrics;
     private OnMonthClickListener mDateClickListener;
@@ -74,15 +72,6 @@ public class MonthView extends View {
         initPaint();
         initMonth();
         initGestureDetector();
-        initTaskHint();
-    }
-
-    private void initTaskHint() {
-        if (mIsShowHint) {
-            // 从数据库中获取圆点提示数据
-            ScheduleDao dao = ScheduleDao.getInstance(getContext());
-            CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, dao.getTaskHintByMonth(mSelYear, mSelMonth));
-        }
     }
 
     private void initGestureDetector() {
@@ -113,7 +102,7 @@ public class MonthView extends View {
 //            mHolidayTextColor = array.getColor(R.styleable.MonthCalendarView_month_holiday_color, Color.parseColor("#A68BFF"));
             mDaySize = array.getInteger(R.styleable.MonthCalendarView_month_day_text_size, 13);
 //            mLunarTextSize = array.getInteger(R.styleable.MonthCalendarView_month_day_lunar_text_size, 8);
-            mIsShowHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_task_hint, true);
+//            mIsShowHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_task_hint, true);
 //            mIsShowLunar = array.getBoolean(R.styleable.MonthCalendarView_month_show_lunar, true);
 //            mIsShowHolidayHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_holiday_hint, true);
             mSelectNowDayColor = array.getColor(R.styleable.MonthCalendarView_month_last_or_next_month_text_color, Color.parseColor("#0073AE"));
@@ -128,7 +117,7 @@ public class MonthView extends View {
 //            mHolidayTextColor = Color.parseColor("#A68BFF");
             mDaySize = 13;
 //            mLunarTextSize = 8;
-            mIsShowHint = true;
+//            mIsShowHint = true;
 //            mIsShowLunar = true;
 //            mIsShowHolidayHint = true;
             mSelectNowDayColor = Color.parseColor("#0073AE");
@@ -189,7 +178,7 @@ public class MonthView extends View {
 //        int selected[] =
         drawThisMonth(canvas);
         drawNextMonth(canvas);
-        drawHintCircle(canvas);
+//        drawHintCircle(canvas);
 //        drawLunarText(canvas, selected);
 //        drawHoliday(canvas);
     }
@@ -414,29 +403,29 @@ public class MonthView extends View {
 //        }
 //    }
 
-    /**
-     * 绘制圆点提示
-     *
-     * @param canvas
-     */
-    private void drawHintCircle(Canvas canvas) {
-        if (mIsShowHint) {
-            List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mSelYear, mSelMonth);
-            if (hints.size() > 0) {
-                mPaint.setColor(mHintCircleColor);
-                int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
-                int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
-                for (int day = 0; day < monthDays; day++) {
-                    int col = (day + weekNumber - 1) % 7;
-                    int row = (day + weekNumber - 1) / 7;
-                    if (!hints.contains(day + 1)) continue;
-                    float circleX = (float) (mColumnSize * col + mColumnSize * 0.5);
-                    float circleY = (float) (mRowSize * row + mRowSize * 0.75);
-                    canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
-                }
-            }
-        }
-    }
+//    /**
+//     * 绘制圆点提示
+//     *
+//     * @param canvas
+//     */
+//    private void drawHintCircle(Canvas canvas) {
+//        if (mIsShowHint) {
+//            List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mSelYear, mSelMonth);
+//            if (hints.size() > 0) {
+//                mPaint.setColor(mHintCircleColor);
+//                int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
+//                int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
+//                for (int day = 0; day < monthDays; day++) {
+//                    int col = (day + weekNumber - 1) % 7;
+//                    int row = (day + weekNumber - 1) / 7;
+//                    if (!hints.contains(day + 1)) continue;
+//                    float circleX = (float) (mColumnSize * col + mColumnSize * 0.5);
+//                    float circleY = (float) (mRowSize * row + mRowSize * 0.75);
+//                    canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public boolean performClick() {
@@ -547,59 +536,59 @@ public class MonthView extends View {
         return mWeekRow;
     }
 
-    /**
-     * 添加多个圆点提示
-     *
-     * @param hints
-     */
-    public void addTaskHints(List<Integer> hints) {
-        if (mIsShowHint) {
-            CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
-            invalidate();
-        }
-    }
-
-    /**
-     * 删除多个圆点提示
-     *
-     * @param hints
-     */
-    public void removeTaskHints(List<Integer> hints) {
-        if (mIsShowHint) {
-            CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
-            invalidate();
-        }
-    }
-
-    /**
-     * 添加一个圆点提示
-     *
-     * @param day
-     */
-    public boolean addTaskHint(Integer day) {
-        if (mIsShowHint) {
-            if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
-                invalidate();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 删除一个圆点提示
-     *
-     * @param day
-     */
-    public boolean removeTaskHint(Integer day) {
-        if (mIsShowHint) {
-            if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
-                invalidate();
-                return true;
-            }
-        }
-        return false;
-    }
+//    /**
+//     * 添加多个圆点提示
+//     *
+//     * @param hints
+//     */
+//    public void addTaskHints(List<Integer> hints) {
+//        if (mIsShowHint) {
+//            CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
+//            invalidate();
+//        }
+//    }
+//
+//    /**
+//     * 删除多个圆点提示
+//     *
+//     * @param hints
+//     */
+//    public void removeTaskHints(List<Integer> hints) {
+//        if (mIsShowHint) {
+//            CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
+//            invalidate();
+//        }
+//    }
+//
+//    /**
+//     * 添加一个圆点提示
+//     *
+//     * @param day
+//     */
+//    public boolean addTaskHint(Integer day) {
+//        if (mIsShowHint) {
+//            if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
+//                invalidate();
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * 删除一个圆点提示
+//     *
+//     * @param day
+//     */
+//    public boolean removeTaskHint(Integer day) {
+//        if (mIsShowHint) {
+//            if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
+//                invalidate();
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     /**
      * 设置点击日期监听

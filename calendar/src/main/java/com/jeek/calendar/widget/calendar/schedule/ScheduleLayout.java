@@ -23,7 +23,6 @@ import com.jeek.calendar.widget.calendar.week.WeekView;
 import org.joda.time.DateTime;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/7 0007.
@@ -512,66 +511,66 @@ public class ScheduleLayout extends FrameLayout {
         mcvCalendar.setCurrentItem(position);
         resetMonthViewDate(year, month, day, position);
     }
-
-    /**
-     * 添加多个圆点提示
-     *
-     * @param hints
-     */
-    public void addTaskHints(List<Integer> hints) {
-        CalendarUtils.getInstance(getContext()).addTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
-        if (mcvCalendar.getCurrentMonthView() != null) {
-            mcvCalendar.getCurrentMonthView().invalidate();
-        }
-        if (wcvCalendar.getCurrentWeekView() != null) {
-            wcvCalendar.getCurrentWeekView().invalidate();
-        }
-    }
-
-    /**
-     * 删除多个圆点提示
-     *
-     * @param hints
-     */
-    public void removeTaskHints(List<Integer> hints) {
-        CalendarUtils.getInstance(getContext()).removeTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
-        if (mcvCalendar.getCurrentMonthView() != null) {
-            mcvCalendar.getCurrentMonthView().invalidate();
-        }
-        if (wcvCalendar.getCurrentWeekView() != null) {
-            wcvCalendar.getCurrentWeekView().invalidate();
-        }
-    }
-
-    /**
-     * 添加一个圆点提示
-     *
-     * @param day
-     */
-    public void addTaskHint(Integer day) {
-        if (mcvCalendar.getCurrentMonthView() != null) {
-            if (mcvCalendar.getCurrentMonthView().addTaskHint(day)) {
-                if (wcvCalendar.getCurrentWeekView() != null) {
-                    wcvCalendar.getCurrentWeekView().invalidate();
-                }
-            }
-        }
-    }
-
-    /**
-     * 删除一个圆点提示
-     *
-     * @param day
-     */
-    public void removeTaskHint(Integer day) {
-        if (mcvCalendar.getCurrentMonthView() != null) {
-            if (mcvCalendar.getCurrentMonthView().removeTaskHint(day)) {
-                if (wcvCalendar.getCurrentWeekView() != null) {
-                    wcvCalendar.getCurrentWeekView().invalidate();
-                }
-            }
-        }
-    }
+//
+//    /**
+//     * 添加多个圆点提示
+//     *
+//     * @param hints
+//     */
+//    public void addTaskHints(List<Integer> hints) {
+//        CalendarUtils.getInstance(getContext()).addTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
+//        if (mcvCalendar.getCurrentMonthView() != null) {
+//            mcvCalendar.getCurrentMonthView().invalidate();
+//        }
+//        if (wcvCalendar.getCurrentWeekView() != null) {
+//            wcvCalendar.getCurrentWeekView().invalidate();
+//        }
+//    }
+//
+//    /**
+//     * 删除多个圆点提示
+//     *
+//     * @param hints
+//     */
+//    public void removeTaskHints(List<Integer> hints) {
+//        CalendarUtils.getInstance(getContext()).removeTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
+//        if (mcvCalendar.getCurrentMonthView() != null) {
+//            mcvCalendar.getCurrentMonthView().invalidate();
+//        }
+//        if (wcvCalendar.getCurrentWeekView() != null) {
+//            wcvCalendar.getCurrentWeekView().invalidate();
+//        }
+//    }
+//
+//    /**
+//     * 添加一个圆点提示
+//     *
+//     * @param day
+//     */
+//    public void addTaskHint(Integer day) {
+//        if (mcvCalendar.getCurrentMonthView() != null) {
+//            if (mcvCalendar.getCurrentMonthView().addTaskHint(day)) {
+//                if (wcvCalendar.getCurrentWeekView() != null) {
+//                    wcvCalendar.getCurrentWeekView().invalidate();
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 删除一个圆点提示
+//     *
+//     * @param day
+//     */
+//    public void removeTaskHint(Integer day) {
+//        if (mcvCalendar.getCurrentMonthView() != null) {
+//            if (mcvCalendar.getCurrentMonthView().removeTaskHint(day)) {
+//                if (wcvCalendar.getCurrentWeekView() != null) {
+//                    wcvCalendar.getCurrentWeekView().invalidate();
+//                }
+//            }
+//        }
+//    }
 
     public ScheduleRecyclerView getSchedulerRecyclerView() {
         return rvScheduleList;

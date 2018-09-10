@@ -13,8 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.jeek.calendar.library.R;
-import com.jeek.calendar.widget.calendar.CalendarUtils;
-import com.jimmy.common.data.ScheduleDao;
 
 import org.joda.time.DateTime;
 
@@ -46,7 +44,7 @@ public class WeekView extends View {
     //    private int[] mHolidays;
 //    private String mHolidayOrLunarText[];
 //    private boolean mIsShowLunar;
-    private boolean mIsShowHint;
+//    private boolean mIsShowHint;
     //    private boolean mIsShowHolidayHint;
     private DateTime mStartDate;
     private DisplayMetrics mDisplayMetrics;
@@ -74,14 +72,14 @@ public class WeekView extends View {
         initGestureDetector();
     }
 
-    private void initTaskHint(DateTime date) {
-        if (mIsShowHint) {
-            // 从数据库中获取圆点提示数据
-            ScheduleDao dao = ScheduleDao.getInstance(getContext());
-            if (CalendarUtils.getInstance(getContext()).getTaskHints(date.getYear(), date.getMonthOfYear() - 1).size() == 0)
-                CalendarUtils.getInstance(getContext()).addTaskHints(date.getYear(), date.getMonthOfYear() - 1, dao.getTaskHintByMonth(mSelYear, mSelMonth));
-        }
-    }
+//    private void initTaskHint(DateTime date) {
+//        if (mIsShowHint) {
+//            // 从数据库中获取圆点提示数据
+//            ScheduleDao dao = ScheduleDao.getInstance(getContext());
+//            if (CalendarUtils.getInstance(getContext()).getTaskHints(date.getYear(), date.getMonthOfYear() - 1).size() == 0)
+//                CalendarUtils.getInstance(getContext()).addTaskHints(date.getYear(), date.getMonthOfYear() - 1, dao.getTaskHintByMonth(mSelYear, mSelMonth));
+//        }
+//    }
 
     private void initAttrs(TypedArray array, DateTime dateTime) {
         if (array != null) {
@@ -95,7 +93,7 @@ public class WeekView extends View {
 //            mHolidayTextColor = array.getColor(R.styleable.WeekCalendarView_week_holiday_color, Color.parseColor("#A68BFF"));
             mDaySize = array.getInteger(R.styleable.WeekCalendarView_week_day_text_size, 13);
 //            mLunarTextSize = array.getInteger(R.styleable.WeekCalendarView_week_day_lunar_text_size, 8);
-            mIsShowHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_task_hint, true);
+//            mIsShowHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_task_hint, true);
 //            mIsShowLunar = array.getBoolean(R.styleable.WeekCalendarView_week_show_lunar, true);
 //            mIsShowHolidayHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_holiday_hint, true);
         } else {
@@ -109,7 +107,7 @@ public class WeekView extends View {
 //            mHolidayTextColor = Color.parseColor("#A68BFF");
             mDaySize = 13;
             mDaySize = 8;
-            mIsShowHint = true;
+//            mIsShowHint = true;
 //            mIsShowLunar = true;
 //            mIsShowHolidayHint = true;
         }
@@ -202,7 +200,7 @@ public class WeekView extends View {
 //        int selected =
         drawThisWeek(canvas);
 //        drawLunarText(canvas, selected);
-        drawHintCircle(canvas);
+//        drawHintCircle(canvas);
 //        drawHoliday(canvas);
     }
 
@@ -322,38 +320,38 @@ public class WeekView extends View {
 //            }
 //        }
 //    }
-
-    /**
-     * 绘制圆点提示
-     *
-     * @param canvas
-     */
-    private void drawHintCircle(Canvas canvas) {
-        if (mIsShowHint) {
-            mPaint.setColor(mHintCircleColor);
-            int startMonth = mStartDate.getMonthOfYear();
-            int endMonth = mStartDate.plusDays(7).getMonthOfYear();
-            int startDay = mStartDate.getDayOfMonth();
-            if (startMonth == endMonth) {
-                List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
-                for (int i = 0; i < 7; i++) {
-                    drawHintCircle(hints, startDay + i, i, canvas);
-                }
-            } else {
-                for (int i = 0; i < 7; i++) {
-                    List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
-                    List<Integer> nextHints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear());
-                    DateTime date = mStartDate.plusDays(i);
-                    int month = date.getMonthOfYear();
-                    if (month == startMonth) {
-                        drawHintCircle(hints, date.getDayOfMonth(), i, canvas);
-                    } else {
-                        drawHintCircle(nextHints, date.getDayOfMonth(), i, canvas);
-                    }
-                }
-            }
-        }
-    }
+//
+//    /**
+//     * 绘制圆点提示
+//     *
+//     * @param canvas
+//     */
+//    private void drawHintCircle(Canvas canvas) {
+//        if (mIsShowHint) {
+//            mPaint.setColor(mHintCircleColor);
+//            int startMonth = mStartDate.getMonthOfYear();
+//            int endMonth = mStartDate.plusDays(7).getMonthOfYear();
+//            int startDay = mStartDate.getDayOfMonth();
+//            if (startMonth == endMonth) {
+//                List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
+//                for (int i = 0; i < 7; i++) {
+//                    drawHintCircle(hints, startDay + i, i, canvas);
+//                }
+//            } else {
+//                for (int i = 0; i < 7; i++) {
+//                    List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
+//                    List<Integer> nextHints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear());
+//                    DateTime date = mStartDate.plusDays(i);
+//                    int month = date.getMonthOfYear();
+//                    if (month == startMonth) {
+//                        drawHintCircle(hints, date.getDayOfMonth(), i, canvas);
+//                    } else {
+//                        drawHintCircle(nextHints, date.getDayOfMonth(), i, canvas);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private void drawHintCircle(List<Integer> hints, int day, int col, Canvas canvas) {
         if (!hints.contains(day)) return;
@@ -429,54 +427,54 @@ public class WeekView extends View {
         return this.mSelDay;
     }
 
-    /**
-     * 添加多个圆点提示
-     *
-     * @param hints
-     */
-    public void addTaskHints(List<Integer> hints) {
-        if (mIsShowHint) {
-            CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
-            invalidate();
-        }
-    }
-
-    /**
-     * 删除多个圆点提示
-     *
-     * @param hints
-     */
-    public void removeTaskHints(List<Integer> hints) {
-        if (mIsShowHint) {
-            CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
-            invalidate();
-        }
-    }
-
-    /**
-     * 添加一个圆点提示
-     *
-     * @param day
-     */
-    public void addTaskHint(Integer day) {
-        if (mIsShowHint) {
-            if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
-                invalidate();
-            }
-        }
-    }
-
-    /**
-     * 删除一个圆点提示
-     *
-     * @param day
-     */
-    public void removeTaskHint(Integer day) {
-        if (mIsShowHint) {
-            if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
-                invalidate();
-            }
-        }
-    }
+//    /**
+//     * 添加多个圆点提示
+//     *
+//     * @param hints
+//     */
+//    public void addTaskHints(List<Integer> hints) {
+//        if (mIsShowHint) {
+//            CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
+//            invalidate();
+//        }
+//    }
+//
+//    /**
+//     * 删除多个圆点提示
+//     *
+//     * @param hints
+//     */
+//    public void removeTaskHints(List<Integer> hints) {
+//        if (mIsShowHint) {
+//            CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
+//            invalidate();
+//        }
+//    }
+//
+//    /**
+//     * 添加一个圆点提示
+//     *
+//     * @param day
+//     */
+//    public void addTaskHint(Integer day) {
+//        if (mIsShowHint) {
+//            if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
+//                invalidate();
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 删除一个圆点提示
+//     *
+//     * @param day
+//     */
+//    public void removeTaskHint(Integer day) {
+//        if (mIsShowHint) {
+//            if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
+//                invalidate();
+//            }
+//        }
+//    }
 
 }
