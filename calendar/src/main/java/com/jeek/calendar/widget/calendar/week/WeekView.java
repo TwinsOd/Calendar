@@ -28,11 +28,12 @@ public class WeekView extends View {
     private Paint mPaint;
     //    private Paint mLunarPaint;
     private int mNormalDayColor;
+    private int mSelectNowDayColor;
     private int mSelectDayColor;
     private int mSelectBGColor;
     private int mSelectBGTodayColor;
-    private int mCurrentDayColor;
-    private int mHintCircleColor;
+    //    private int mCurrentDayColor;
+//    private int mHintCircleColor;
     //    private int mLunarTextColor;
 //    private int mHolidayTextColor;
     private int mCurrYear, mCurrMonth, mCurrDay;
@@ -87,8 +88,8 @@ public class WeekView extends View {
             mSelectBGColor = array.getColor(R.styleable.WeekCalendarView_week_selected_circle_color, Color.parseColor("#E8E8E8"));
             mSelectBGTodayColor = array.getColor(R.styleable.WeekCalendarView_week_selected_circle_today_color, Color.parseColor("#FF8594"));
             mNormalDayColor = array.getColor(R.styleable.WeekCalendarView_week_normal_text_color, Color.parseColor("#575471"));
-            mCurrentDayColor = array.getColor(R.styleable.WeekCalendarView_week_today_text_color, Color.parseColor("#FF8594"));
-            mHintCircleColor = array.getColor(R.styleable.WeekCalendarView_week_hint_circle_color, Color.parseColor("#FE8595"));
+//            mCurrentDayColor = array.getColor(R.styleable.WeekCalendarView_week_today_text_color, Color.parseColor("#FF8594"));
+//            mHintCircleColor = array.getColor(R.styleable.WeekCalendarView_week_hint_circle_color, Color.parseColor("#FE8595"));
 //            mLunarTextColor = array.getColor(R.styleable.WeekCalendarView_week_lunar_text_color, Color.parseColor("#ACA9BC"));
 //            mHolidayTextColor = array.getColor(R.styleable.WeekCalendarView_week_holiday_color, Color.parseColor("#A68BFF"));
             mDaySize = array.getInteger(R.styleable.WeekCalendarView_week_day_text_size, 13);
@@ -96,20 +97,22 @@ public class WeekView extends View {
 //            mIsShowHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_task_hint, true);
 //            mIsShowLunar = array.getBoolean(R.styleable.WeekCalendarView_week_show_lunar, true);
 //            mIsShowHolidayHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_holiday_hint, true);
+            mSelectNowDayColor = array.getColor(R.styleable.MonthCalendarView_month_last_or_next_month_text_color, Color.parseColor("#0073AE"));
         } else {
             mSelectDayColor = Color.parseColor("#FFFFFF");
             mSelectBGColor = Color.parseColor("#E8E8E8");
             mSelectBGTodayColor = Color.parseColor("#FF8594");
             mNormalDayColor = Color.parseColor("#575471");
-            mCurrentDayColor = Color.parseColor("#FF8594");
-            mHintCircleColor = Color.parseColor("#FE8595");
+//            mCurrentDayColor = Color.parseColor("#FF8594");
+//            mHintCircleColor = Color.parseColor("#FE8595");
 //            mLunarTextColor = Color.parseColor("#ACA9BC");
 //            mHolidayTextColor = Color.parseColor("#A68BFF");
-            mDaySize = 13;
+//            mDaySize = 13;
             mDaySize = 8;
 //            mIsShowHint = true;
 //            mIsShowLunar = true;
 //            mIsShowHolidayHint = true;
+            mSelectNowDayColor = Color.parseColor("#0073AE");
         }
         mStartDate = dateTime;
 //        mRestBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_rest_day);
@@ -234,12 +237,14 @@ public class WeekView extends View {
                     mPaint.setColor(mSelectBGColor);
                 }
                 canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
-            }
-            if (day == mSelDay) {
                 selected = i;
                 mPaint.setColor(mSelectDayColor);
-            } else if (date.getYear() == mCurrYear && date.getMonthOfYear() - 1 == mCurrMonth && day == mCurrDay && day != mSelDay && mCurrYear == mSelYear) {
-                mPaint.setColor(mCurrentDayColor);
+            } else if (day == mCurrDay && mCurrDay != mSelDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
+                int startRecX = mColumnSize * i;
+                int endRecX = startRecX + mColumnSize;
+                mPaint.setColor(mSelectNowDayColor);
+                canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
+                mPaint.setColor(mSelectDayColor);
             } else {
                 mPaint.setColor(mNormalDayColor);
             }

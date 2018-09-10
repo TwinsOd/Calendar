@@ -31,8 +31,8 @@ public class MonthView extends View {
     private int mSelectNowDayColor;
     private int mSelectBGColor;
     private int mSelectBGTodayColor;
-    private int mCurrentDayColor;
-    private int mHintCircleColor;
+    //    private int mCurrentDayColor;
+//    private int mHintCircleColor;
     //    private int mLunarTextColor;
 //    private int mHolidayTextColor;
     private int mLastOrNextMonthTextColor;
@@ -95,8 +95,8 @@ public class MonthView extends View {
             mSelectBGColor = array.getColor(R.styleable.MonthCalendarView_month_selected_circle_color, Color.parseColor("#E8E8E8"));
             mSelectBGTodayColor = array.getColor(R.styleable.MonthCalendarView_month_selected_circle_today_color, Color.parseColor("#FF8594"));
             mNormalDayColor = array.getColor(R.styleable.MonthCalendarView_month_normal_text_color, Color.parseColor("#575471"));
-            mCurrentDayColor = array.getColor(R.styleable.MonthCalendarView_month_today_text_color, Color.parseColor("#FF8594"));
-            mHintCircleColor = array.getColor(R.styleable.MonthCalendarView_month_hint_circle_color, Color.parseColor("#FE8595"));
+//            mCurrentDayColor = array.getColor(R.styleable.MonthCalendarView_month_today_text_color, Color.parseColor("#FF8594"));
+//            mHintCircleColor = array.getColor(R.styleable.MonthCalendarView_month_hint_circle_color, Color.parseColor("#FE8595"));
             mLastOrNextMonthTextColor = array.getColor(R.styleable.MonthCalendarView_month_last_or_next_month_text_color, Color.parseColor("#ACA9BC"));
 //            mLunarTextColor = array.getColor(R.styleable.MonthCalendarView_month_lunar_text_color, Color.parseColor("#ACA9BC"));
 //            mHolidayTextColor = array.getColor(R.styleable.MonthCalendarView_month_holiday_color, Color.parseColor("#A68BFF"));
@@ -111,8 +111,8 @@ public class MonthView extends View {
             mSelectBGColor = Color.parseColor("#E8E8E8");
             mSelectBGTodayColor = Color.parseColor("#FF8594");
             mNormalDayColor = Color.parseColor("#575471");
-            mCurrentDayColor = Color.parseColor("#FF8594");
-            mHintCircleColor = Color.parseColor("#FE8595");
+//            mCurrentDayColor = Color.parseColor("#FF8594");
+//            mHintCircleColor = Color.parseColor("#FE8595");
             mLastOrNextMonthTextColor = Color.parseColor("#ACA9BC");
 //            mHolidayTextColor = Color.parseColor("#A68BFF");
             mDaySize = 13;
