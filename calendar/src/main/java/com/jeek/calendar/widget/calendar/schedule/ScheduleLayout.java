@@ -23,6 +23,7 @@ import com.jeek.calendar.widget.calendar.week.WeekView;
 import org.joda.time.DateTime;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/7 0007.
@@ -147,6 +148,7 @@ public class ScheduleLayout extends FrameLayout {
         @Override
         public void onPageChange(int year, int month, int day) {
             Log.i("ScheduleLayout", "onPageChange, month = " + month);
+            mOnCalendarClickListener.onPageChange(year, month, day);
             computeCurrentRowsIsSix(year, month);
         }
     };
@@ -204,6 +206,7 @@ public class ScheduleLayout extends FrameLayout {
 
         @Override
         public void onPageChange(int year, int month, int day) {
+            mOnCalendarClickListener.onPageChange(year, month, day);
             if (mIsAutoChangeMonthRow) {
                 if (mCurrentSelectMonth != month) {
                     mCurrentRowsIsSix = CalendarUtils.getMonthRows(year, month) == 6;
@@ -571,6 +574,14 @@ public class ScheduleLayout extends FrameLayout {
 //            }
 //        }
 //    }
+
+    public void setEventData(List<Integer> list) {
+        if (mState == ScheduleState.CLOSE) {
+            getWeekCalendar().getCurrentWeekView().setEvent(list);
+        } else if (mState == ScheduleState.OPEN) {
+            getMonthCalendar().getCurrentMonthView().setEvent(list);
+        }
+    }
 
     public ScheduleRecyclerView getSchedulerRecyclerView() {
         return rvScheduleList;

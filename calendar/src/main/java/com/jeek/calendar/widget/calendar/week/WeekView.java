@@ -51,7 +51,8 @@ public class WeekView extends View {
     private DisplayMetrics mDisplayMetrics;
     private OnWeekClickListener mOnWeekClickListener;
     private GestureDetector mGestureDetector;
-//    private Bitmap mRestBitmap, mWorkBitmap;
+    //    private Bitmap mRestBitmap, mWorkBitmap;
+    private List<Integer> listEvent;
 
     public WeekView(Context context, DateTime dateTime) {
         this(context, null, dateTime);
@@ -205,6 +206,8 @@ public class WeekView extends View {
 //        drawLunarText(canvas, selected);
 //        drawHintCircle(canvas);
 //        drawHoliday(canvas);
+        if (listEvent != null && listEvent.size() > 0)
+            drawEvent(canvas);
     }
 
     private void clearData() {
@@ -252,6 +255,26 @@ public class WeekView extends View {
 //            mHolidayOrLunarText[i] = CalendarUtils.getHolidayFromSolar(date.getYear(), date.getMonthOfYear() - 1, day);
         }
         return selected;
+    }
+
+    private void drawEvent(Canvas canvas) {
+        int startDayOfWeek = mStartDate.getDayOfMonth();
+        for (Integer integer : listEvent) {
+            if (integer >= startDayOfWeek && integer < (startDayOfWeek + 7)) {
+                int day = integer - startDayOfWeek;
+
+                int startRecX = mColumnSize * day;
+                int endRecX = startRecX + mColumnSize;
+                mPaint.setColor(mSelectBGColor);
+                canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
+
+                //draw text
+                int startX = (int) (mColumnSize * day + (mColumnSize - mPaint.measureText(String.valueOf(integer))) / 2);
+                int startY = (int) (mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
+                mPaint.setColor(mSelectDayColor);
+                canvas.drawText(String.valueOf(integer), startX, startY, mPaint);
+            }
+        }
     }
 
 //    /**
@@ -430,6 +453,13 @@ public class WeekView extends View {
      */
     public int getSelectDay() {
         return this.mSelDay;
+    }
+
+    public void setEvent(List<Integer> list) {
+        if (list != null && list.size() > 0) {
+            listEvent = list;
+            invalidate();
+        }
     }
 
 //    /**

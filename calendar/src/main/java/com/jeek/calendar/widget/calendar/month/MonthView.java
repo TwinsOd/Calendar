@@ -16,6 +16,7 @@ import com.jeek.calendar.library.R;
 import com.jeek.calendar.widget.calendar.CalendarUtils;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/6 0006.
@@ -52,7 +53,8 @@ public class MonthView extends View {
     private DisplayMetrics mDisplayMetrics;
     private OnMonthClickListener mDateClickListener;
     private GestureDetector mGestureDetector;
-//    private Bitmap mRestBitmap, mWorkBitmap;
+    private List<Integer> listEvent;
+    //    private Bitmap mRestBitmap, mWorkBitmap;
 
     public MonthView(Context context, int year, int month) {
         this(context, null, year, month);
@@ -181,6 +183,8 @@ public class MonthView extends View {
 //        drawHintCircle(canvas);
 //        drawLunarText(canvas, selected);
 //        drawHoliday(canvas);
+        if (listEvent != null && listEvent.size() > 0)
+            drawEvent(canvas);
     }
 
     private void initSize() {
@@ -259,6 +263,27 @@ public class MonthView extends View {
                 mPaint.setColor(mNormalDayColor);
             }
             canvas.drawText(dayString, startX, startY, mPaint);
+        }
+    }
+
+    private void drawEvent(Canvas canvas) {
+        int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
+        for (Integer integer : listEvent) {
+            int day = integer - 1;
+            int col = (day + weekNumber - 1) % 7;
+            int row = (day + weekNumber - 1) / 7;
+            int startRecX = mColumnSize * col;
+            int startRecY = mRowSize * row;
+            int endRecX = startRecX + mColumnSize;
+            int endRecY = startRecY + mRowSize;
+            mPaint.setColor(mSelectBGColor);
+            canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2, mSelectCircleSize, mPaint);
+
+            //draw text
+            int startX = (int) (mColumnSize * col + (mColumnSize - mPaint.measureText(String.valueOf(integer))) / 2);
+            int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
+            mPaint.setColor(mSelectDayColor);
+            canvas.drawText(String.valueOf(integer), startX, startY, mPaint);
         }
     }
 
@@ -599,5 +624,11 @@ public class MonthView extends View {
         this.mDateClickListener = dateClickListener;
     }
 
+    public void setEvent(List<Integer> list) {
+        if (list != null && list.size() > 0) {
+            listEvent = list;
+            invalidate();
+        }
+    }
 }
 

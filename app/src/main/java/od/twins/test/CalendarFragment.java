@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
 import com.jeek.calendar.widget.calendar.schedule.ScheduleLayout;
@@ -124,7 +123,13 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
 
     @Override
     public void onPageChange(int year, int month, int day) {
-        Toast.makeText(mActivity, "onPageChange: month is " + month, Toast.LENGTH_SHORT).show();
+        List<Integer> list = new ArrayList<>();
+        list.add(5);
+        list.add(7);
+        list.add(10);
+        list.add(20);
+        list.add(23);
+        slSchedule.setEventData(list);
     }
 
     private void setCurrentSelectDate(int year, int month, int day) {
@@ -132,12 +137,5 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
         mCurrentSelectMonth = month;
         mCurrentSelectDay = day;
         monthView.setText(mMonthText[month]);
-//        if (mActivity instanceof MainActivity) {
-//            ((MainActivity) mActivity).resetMainTitleDate(year, month, day);
-//        }
-    }
-
-    public void resetScheduleList() {
-//        new LoadScheduleTask(mActivity, this, mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }
