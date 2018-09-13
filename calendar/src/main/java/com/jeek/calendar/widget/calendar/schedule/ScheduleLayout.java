@@ -101,6 +101,7 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private void bindingMonthAndWeekCalendar() {
+        Log.i("ScheduleLayout", "bindingMonthAndWeekCalendar ");
         mcvCalendar.setOnCalendarClickListener(mMonthCalendarClickListener);
         wcvCalendar.setOnCalendarClickListener(mWeekCalendarClickListener);
         // 初始化视图
@@ -154,6 +155,7 @@ public class ScheduleLayout extends FrameLayout {
     };
 
     private void computeCurrentRowsIsSix(int year, int month) {
+        Log.i("ScheduleLayout", "computeCurrentRowsIsSix ");
         if (mIsAutoChangeMonthRow) {
             boolean isSixRow = CalendarUtils.getMonthRows(year, month) == 6;
             if (mCurrentRowsIsSix != isSixRow) {
@@ -262,6 +264,7 @@ public class ScheduleLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Log.i("ScheduleLayout", "onInterceptTouchEvent ");
         if (mIsScrolling) {
             return true;
         }
@@ -280,6 +283,7 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private boolean isRecyclerViewTouch() {
+        Log.i("ScheduleLayout", "isRecyclerViewTouch ");
         return mState == ScheduleState.CLOSE && (rvScheduleList.getChildCount() == 0 || rvScheduleList.isScrollTop());
     }
 
@@ -301,12 +305,25 @@ public class ScheduleLayout extends FrameLayout {
                 transferEvent(event);
                 changeCalendarState();
                 resetScrollingState();
+                requestEventData();
                 return true;
         }
         return super.onTouchEvent(event);
     }
 
+    private void requestEventData(){
+        Log.i("ScheduleLayout", "requestEventData _ mState = " + mState);
+        if (mState == ScheduleState.CLOSE) {
+            mOnCalendarClickListener.onPageChange(getWeekCalendar().getCurrentWeekView().getSelectYear(),
+                    getWeekCalendar().getCurrentWeekView().getSelectYear(),0);
+        } else if (mState == ScheduleState.OPEN) {
+            mOnCalendarClickListener.onPageChange(getMonthCalendar().getCurrentMonthView().getSelectYear(),
+                    getMonthCalendar().getCurrentMonthView().getSelectMonth(), 0);
+        }
+    }
+
     private void transferEvent(MotionEvent event) {
+        Log.i("ScheduleLayout", "transferEvent ");
         if (mState == ScheduleState.CLOSE) {
             mcvCalendar.setVisibility(VISIBLE);
             wcvCalendar.setVisibility(INVISIBLE);
@@ -317,6 +334,7 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private void changeCalendarState() {
+        Log.i("ScheduleLayout", "changeCalendarState ");
         if (rlScheduleList.getY() > mRowSize * 2 &&
                 rlScheduleList.getY() < mcvCalendar.getHeight() - mRowSize) { // 位于中间
             ScheduleAnimation animation = new ScheduleAnimation(this, mState, mAutoScrollDistance);
@@ -388,6 +406,7 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private void resetCalendarPosition() {
+        Log.i("ScheduleLayout", "resetCalendarPosition ");
         if (mState == ScheduleState.OPEN) {
             rlMonthCalendar.setY(0);
             if (mCurrentRowsIsSix) {
@@ -402,6 +421,7 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private void resetCalendar() {
+        Log.i("ScheduleLayout", "resetCalendar ");
         if (mState == ScheduleState.OPEN) {
             mcvCalendar.setVisibility(VISIBLE);
             wcvCalendar.setVisibility(INVISIBLE);
@@ -412,6 +432,7 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private void changeState() {
+        Log.i("ScheduleLayout", "changeState ");
         if (mState == ScheduleState.OPEN) {
             mState = ScheduleState.CLOSE;
             mcvCalendar.setVisibility(INVISIBLE);
@@ -514,73 +535,15 @@ public class ScheduleLayout extends FrameLayout {
         mcvCalendar.setCurrentItem(position);
         resetMonthViewDate(year, month, day, position);
     }
-//
-//    /**
-//     * 添加多个圆点提示
-//     *
-//     * @param hints
-//     */
-//    public void addTaskHints(List<Integer> hints) {
-//        CalendarUtils.getInstance(getContext()).addTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
-//        if (mcvCalendar.getCurrentMonthView() != null) {
-//            mcvCalendar.getCurrentMonthView().invalidate();
-//        }
-//        if (wcvCalendar.getCurrentWeekView() != null) {
-//            wcvCalendar.getCurrentWeekView().invalidate();
-//        }
-//    }
-//
-//    /**
-//     * 删除多个圆点提示
-//     *
-//     * @param hints
-//     */
-//    public void removeTaskHints(List<Integer> hints) {
-//        CalendarUtils.getInstance(getContext()).removeTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
-//        if (mcvCalendar.getCurrentMonthView() != null) {
-//            mcvCalendar.getCurrentMonthView().invalidate();
-//        }
-//        if (wcvCalendar.getCurrentWeekView() != null) {
-//            wcvCalendar.getCurrentWeekView().invalidate();
-//        }
-//    }
-//
-//    /**
-//     * 添加一个圆点提示
-//     *
-//     * @param day
-//     */
-//    public void addTaskHint(Integer day) {
-//        if (mcvCalendar.getCurrentMonthView() != null) {
-//            if (mcvCalendar.getCurrentMonthView().addTaskHint(day)) {
-//                if (wcvCalendar.getCurrentWeekView() != null) {
-//                    wcvCalendar.getCurrentWeekView().invalidate();
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 删除一个圆点提示
-//     *
-//     * @param day
-//     */
-//    public void removeTaskHint(Integer day) {
-//        if (mcvCalendar.getCurrentMonthView() != null) {
-//            if (mcvCalendar.getCurrentMonthView().removeTaskHint(day)) {
-//                if (wcvCalendar.getCurrentWeekView() != null) {
-//                    wcvCalendar.getCurrentWeekView().invalidate();
-//                }
-//            }
-//        }
-//    }
 
     public void setEventData(List<Integer> list) {
-        if (mState == ScheduleState.CLOSE) {
-            getWeekCalendar().getCurrentWeekView().setEvent(list);
-        } else if (mState == ScheduleState.OPEN) {
-            getMonthCalendar().getCurrentMonthView().setEvent(list);
-        }
+        getWeekCalendar().getCurrentWeekView().setEvent(list);
+        getMonthCalendar().getCurrentMonthView().setEvent(list);
+//        if (mState == ScheduleState.CLOSE) {
+//            getWeekCalendar().getCurrentWeekView().setEvent(list);
+//        } else if (mState == ScheduleState.OPEN) {
+//            getMonthCalendar().getCurrentMonthView().setEvent(list);
+//        }
     }
 
     public ScheduleRecyclerView getSchedulerRecyclerView() {

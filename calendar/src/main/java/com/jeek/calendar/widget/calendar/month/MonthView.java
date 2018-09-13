@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,35 +27,23 @@ public class MonthView extends View {
     private static final int NUM_COLUMNS = 7;
     private static final int NUM_ROWS = 6;
     private Paint mPaint;
-    //    private Paint mLunarPaint;
     private int mNormalDayColor;
     private int mSelectDayColor;
     private int mSelectNowDayColor;
     private int mSelectBGColor;
-    private int mSelectBGTodayColor;
-    //    private int mCurrentDayColor;
-//    private int mHintCircleColor;
-    //    private int mLunarTextColor;
-//    private int mHolidayTextColor;
     private int mLastOrNextMonthTextColor;
     private int mCurrYear, mCurrMonth, mCurrDay;
     private int mSelYear, mSelMonth, mSelDay;
     private int mColumnSize, mRowSize, mSelectCircleSize;
     private int mDaySize;
-    //    private int mLunarTextSize;
     private int mWeekRow; // 当前月份第几周
     private int mCircleRadius = 6;
     private int[][] mDaysText;
-    //    private int[] mHolidays;
-//    private String[][] mHolidayOrLunarText;
-//    private boolean mIsShowLunar;
-//    private boolean mIsShowHint;
-    //    private boolean mIsShowHolidayHint;
     private DisplayMetrics mDisplayMetrics;
     private OnMonthClickListener mDateClickListener;
     private GestureDetector mGestureDetector;
     private List<Integer> listEvent;
-    //    private Bitmap mRestBitmap, mWorkBitmap;
+    private boolean isClicked = false;
 
     public MonthView(Context context, int year, int month) {
         this(context, null, year, month);
@@ -85,6 +74,8 @@ public class MonthView extends View {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
+                isClicked = true;
+                Log.i("MonthView", "initGestureDetector:onSingleTapUp");
                 doClickAction((int) e.getX(), (int) e.getY());
                 return true;
             }
@@ -95,40 +86,20 @@ public class MonthView extends View {
         if (array != null) {
             mSelectDayColor = array.getColor(R.styleable.MonthCalendarView_month_selected_text_color, Color.parseColor("#FFFFFF"));
             mSelectBGColor = array.getColor(R.styleable.MonthCalendarView_month_selected_circle_color, Color.parseColor("#E8E8E8"));
-            mSelectBGTodayColor = array.getColor(R.styleable.MonthCalendarView_month_selected_circle_today_color, Color.parseColor("#FF8594"));
             mNormalDayColor = array.getColor(R.styleable.MonthCalendarView_month_normal_text_color, Color.parseColor("#575471"));
-//            mCurrentDayColor = array.getColor(R.styleable.MonthCalendarView_month_today_text_color, Color.parseColor("#FF8594"));
-//            mHintCircleColor = array.getColor(R.styleable.MonthCalendarView_month_hint_circle_color, Color.parseColor("#FE8595"));
             mLastOrNextMonthTextColor = array.getColor(R.styleable.MonthCalendarView_month_last_or_next_month_text_color, Color.parseColor("#ACA9BC"));
-//            mLunarTextColor = array.getColor(R.styleable.MonthCalendarView_month_lunar_text_color, Color.parseColor("#ACA9BC"));
-//            mHolidayTextColor = array.getColor(R.styleable.MonthCalendarView_month_holiday_color, Color.parseColor("#A68BFF"));
             mDaySize = array.getInteger(R.styleable.MonthCalendarView_month_day_text_size, 13);
-//            mLunarTextSize = array.getInteger(R.styleable.MonthCalendarView_month_day_lunar_text_size, 8);
-//            mIsShowHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_task_hint, true);
-//            mIsShowLunar = array.getBoolean(R.styleable.MonthCalendarView_month_show_lunar, true);
-//            mIsShowHolidayHint = array.getBoolean(R.styleable.MonthCalendarView_month_show_holiday_hint, true);
             mSelectNowDayColor = array.getColor(R.styleable.MonthCalendarView_month_last_or_next_month_text_color, Color.parseColor("#0073AE"));
         } else {
             mSelectDayColor = Color.parseColor("#FFFFFF");
             mSelectBGColor = Color.parseColor("#E8E8E8");
-            mSelectBGTodayColor = Color.parseColor("#FF8594");
             mNormalDayColor = Color.parseColor("#575471");
-//            mCurrentDayColor = Color.parseColor("#FF8594");
-//            mHintCircleColor = Color.parseColor("#FE8595");
             mLastOrNextMonthTextColor = Color.parseColor("#ACA9BC");
-//            mHolidayTextColor = Color.parseColor("#A68BFF");
             mDaySize = 13;
-//            mLunarTextSize = 8;
-//            mIsShowHint = true;
-//            mIsShowLunar = true;
-//            mIsShowHolidayHint = true;
             mSelectNowDayColor = Color.parseColor("#0073AE");
         }
         mSelYear = year;
         mSelMonth = month;
-//        mRestBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_rest_day);
-//        mWorkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_work_day);
-//        mHolidays = CalendarUtils.getInstance(getContext()).getHolidays(mSelYear, mSelMonth + 1);
     }
 
     private void initPaint() {
@@ -138,11 +109,6 @@ public class MonthView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setTextSize(mDaySize * mDisplayMetrics.scaledDensity);
         mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-
-//        mLunarPaint = new Paint();
-//        mLunarPaint.setAntiAlias(true);
-//        mLunarPaint.setTextSize(mLunarTextSize * mDisplayMetrics.scaledDensity);
-//        mLunarPaint.setColor(mLunarTextColor);
     }
 
     private void initMonth() {
@@ -177,12 +143,8 @@ public class MonthView extends View {
         initSize();
         clearData();
         drawLastMonth(canvas);
-//        int selected[] =
         drawThisMonth(canvas);
         drawNextMonth(canvas);
-//        drawHintCircle(canvas);
-//        drawLunarText(canvas, selected);
-//        drawHoliday(canvas);
         if (listEvent != null && listEvent.size() > 0)
             drawEvent(canvas);
     }
@@ -198,7 +160,6 @@ public class MonthView extends View {
 
     private void clearData() {
         mDaysText = new int[6][7];
-//        mHolidayOrLunarText = new String[6][7];
     }
 
     private void drawLastMonth(Canvas canvas) {
@@ -219,7 +180,6 @@ public class MonthView extends View {
             int startX = (int) (mColumnSize * day + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
             canvas.drawText(dayString, startX, startY, mPaint);
-//            mHolidayOrLunarText[0][day] = CalendarUtils.getHolidayFromSolar(lastYear, lastMonth, mDaysText[0][day]);
         }
     }
 
@@ -235,21 +195,21 @@ public class MonthView extends View {
             int startX = (int) (mColumnSize * col + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
 
-            if (dayString.equals(String.valueOf(mSelDay))) {
+            if (!isClicked && (day + 1) == mSelDay)
+                mWeekRow = row + 1;
+
+            if ((day + 1) == mSelDay && isClicked) {
                 int startRecX = mColumnSize * col;
                 int startRecY = mRowSize * row;
                 int endRecX = startRecX + mColumnSize;
                 int endRecY = startRecY + mRowSize;
-                if (mSelYear == mCurrYear && mCurrMonth == mSelMonth && day + 1 == mCurrDay) {
-                    mPaint.setColor(mSelectBGTodayColor);
-                } else {
-                    mPaint.setColor(mSelectBGColor);
-                }
+
+                mPaint.setColor(mSelectBGColor);
                 canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2, mSelectCircleSize, mPaint);
                 mWeekRow = row + 1;
 
                 mPaint.setColor(mSelectDayColor);
-            } else if (dayString.equals(String.valueOf(mCurrDay)) && mCurrDay != mSelDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
+            } else if ((day + 1) == mCurrDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
                 int startRecX = mColumnSize * col;
                 int startRecY = mRowSize * row;
                 int endRecX = startRecX + mColumnSize;
@@ -292,18 +252,11 @@ public class MonthView extends View {
         int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
         int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
         int nextMonthDays = 42 - monthDays - weekNumber + 1;
-//        int nextMonth = mSelMonth + 1;
-//        int nextYear = mSelYear;
-//        if (nextMonth == 12) {
-//            nextMonth = 0;
-//            nextYear += 1;
-//        }
         for (int day = 0; day < nextMonthDays; day++) {
             int column = (monthDays + weekNumber - 1 + day) % 7;
             int row = 5 - (nextMonthDays - day - 1) / 7;
             try {
                 mDaysText[row][column] = day + 1;
-//                mHolidayOrLunarText[row][column] = CalendarUtils.getHolidayFromSolar(nextYear, nextMonth, mDaysText[row][column]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -313,144 +266,6 @@ public class MonthView extends View {
             canvas.drawText(dayString, startX, startY, mPaint);
         }
     }
-
-//    /**
-//     * 绘制农历
-//     *
-//     * @param canvas
-//     * @param selected
-//     */
-//    private void drawLunarText(Canvas canvas, int[] selected) {
-//        if (mIsShowLunar) {
-//            int firstYear, firstMonth, firstDay, monthDays;
-//            int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
-//            if (weekNumber == 1) {
-//                firstYear = mSelYear;
-//                firstMonth = mSelMonth + 1;
-//                firstDay = 1;
-//                monthDays = CalendarUtils.getMonthDays(firstYear, firstMonth);
-//            } else {
-//                if (mSelMonth == 0) {
-//                    firstYear = mSelYear - 1;
-//                    firstMonth = 11;
-//                    monthDays = CalendarUtils.getMonthDays(firstYear, firstMonth);
-//                    firstMonth = 12;
-//                } else {
-//                    firstYear = mSelYear;
-//                    firstMonth = mSelMonth - 1;
-//                    monthDays = CalendarUtils.getMonthDays(firstYear, firstMonth);
-//                    firstMonth = mSelMonth;
-//                }
-//                firstDay = monthDays - weekNumber + 2;
-//            }
-//            LunarCalendarUtils.Lunar lunar = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(firstYear, firstMonth, firstDay));
-//            int days;
-//            int day = lunar.lunarDay;
-//            int leapMonth = LunarCalendarUtils.leapMonth(lunar.lunarYear);
-//            days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
-//            boolean isChangeMonth = false;
-//            for (int i = 0; i < 42; i++) {
-//                int column = i % 7;
-//                int row = i / 7;
-//                if (day > days) {
-//                    day = 1;
-//                    boolean isAdd = true;
-//                    if (lunar.lunarMonth == 12) {
-//                        lunar.lunarMonth = 1;
-//                        lunar.lunarYear = lunar.lunarYear + 1;
-//                        isAdd = false;
-//                    }
-//                    if (lunar.lunarMonth == leapMonth) {
-//                        days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
-//                    } else {
-//                        if (isAdd) {
-//                            lunar.lunarMonth++;
-//                            days = LunarCalendarUtils.daysInLunarMonth(lunar.lunarYear, lunar.lunarMonth);
-//                        }
-//                    }
-//                }
-//                if (firstDay > monthDays) {
-//                    firstDay = 1;
-//                    isChangeMonth = true;
-//                }
-//                if (row == 0 && mDaysText[row][column] >= 23 || row >= 4 && mDaysText[row][column] <= 14) {
-//                    mLunarPaint.setColor(mLunarTextColor);
-//                } else {
-//                    mLunarPaint.setColor(mHolidayTextColor);
-//                }
-//                String dayString = mHolidayOrLunarText[row][column];
-//                if ("".equals(dayString)) {
-//                    dayString = LunarCalendarUtils.getLunarHoliday(lunar.lunarYear, lunar.lunarMonth, day);
-//                }
-//                if ("".equals(dayString)) {
-//                    dayString = LunarCalendarUtils.getLunarDayString(day);
-//                    mLunarPaint.setColor(mLunarTextColor);
-//                }
-//                if ("初一".equals(dayString)) {
-//                    int curYear = firstYear, curMonth = firstMonth;
-//                    if (isChangeMonth) {
-//                        curMonth++;
-//                        if (curMonth == 13) {
-//                            curMonth = 1;
-//                            curYear++;
-//                        }
-//                    }
-//                    LunarCalendarUtils.Lunar chuyi = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(curYear, curMonth, firstDay));
-//                    dayString = LunarCalendarUtils.getLunarFirstDayString(chuyi.lunarMonth, chuyi.isLeap);
-//                }
-//                if (selected[0] == row && selected[1] == column) {
-//                    mLunarPaint.setColor(mSelectDayColor);
-//                }
-//                int startX = (int) (mColumnSize * column + (mColumnSize - mLunarPaint.measureText(dayString)) / 2);
-//                int startY = (int) (mRowSize * row + mRowSize * 0.72 - (mLunarPaint.ascent() + mLunarPaint.descent()) / 2);
-//                canvas.drawText(dayString, startX, startY, mLunarPaint);
-//                day++;
-//                firstDay++;
-//            }
-//        }
-//    }
-
-//    private void drawHoliday(Canvas canvas) {
-//        if (mIsShowHolidayHint) {
-//            Rect rect = new Rect(0, 0, mRestBitmap.getWidth(), mRestBitmap.getHeight());
-//            Rect rectF = new Rect();
-//            int distance = (int) (mSelectCircleSize / 2.5);
-//            for (int i = 0; i < mHolidays.length; i++) {
-//                int column = i % 7;
-//                int row = i / 7;
-//                rectF.set(mColumnSize * (column + 1) - mRestBitmap.getWidth() - distance, mRowSize * row + distance, mColumnSize * (column + 1) - distance, mRowSize * row + mRestBitmap.getHeight() + distance);
-//                if (mHolidays[i] == 1) {
-//                    canvas.drawBitmap(mRestBitmap, rect, rectF, null);
-//                } else if (mHolidays[i] == 2) {
-//                    canvas.drawBitmap(mWorkBitmap, rect, rectF, null);
-//                }
-//            }
-//        }
-//    }
-
-//    /**
-//     * 绘制圆点提示
-//     *
-//     * @param canvas
-//     */
-//    private void drawHintCircle(Canvas canvas) {
-//        if (mIsShowHint) {
-//            List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mSelYear, mSelMonth);
-//            if (hints.size() > 0) {
-//                mPaint.setColor(mHintCircleColor);
-//                int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
-//                int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
-//                for (int day = 0; day < monthDays; day++) {
-//                    int col = (day + weekNumber - 1) % 7;
-//                    int row = (day + weekNumber - 1) / 7;
-//                    if (!hints.contains(day + 1)) continue;
-//                    float circleX = (float) (mColumnSize * col + mColumnSize * 0.5);
-//                    float circleY = (float) (mRowSize * row + mRowSize * 0.75);
-//                    canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
-//                }
-//            }
-//        }
-//    }
 
     @Override
     public boolean performClick() {
@@ -560,60 +375,6 @@ public class MonthView extends View {
     public int getWeekRow() {
         return mWeekRow;
     }
-
-//    /**
-//     * 添加多个圆点提示
-//     *
-//     * @param hints
-//     */
-//    public void addTaskHints(List<Integer> hints) {
-//        if (mIsShowHint) {
-//            CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
-//            invalidate();
-//        }
-//    }
-//
-//    /**
-//     * 删除多个圆点提示
-//     *
-//     * @param hints
-//     */
-//    public void removeTaskHints(List<Integer> hints) {
-//        if (mIsShowHint) {
-//            CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
-//            invalidate();
-//        }
-//    }
-//
-//    /**
-//     * 添加一个圆点提示
-//     *
-//     * @param day
-//     */
-//    public boolean addTaskHint(Integer day) {
-//        if (mIsShowHint) {
-//            if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
-//                invalidate();
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * 删除一个圆点提示
-//     *
-//     * @param day
-//     */
-//    public boolean removeTaskHint(Integer day) {
-//        if (mIsShowHint) {
-//            if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
-//                invalidate();
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     /**
      * 设置点击日期监听

@@ -18,6 +18,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
 
     private MonthAdapter mMonthAdapter;
     private OnCalendarClickListener mOnCalendarClickListener;
+    private boolean isLoaded = false;
 
     public MonthCalendarView(Context context) {
         this(context, null);
@@ -69,6 +70,11 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (!isLoaded){
+                isLoaded = true;
+                mOnCalendarClickListener.onPageChange(getCurrentMonthView().getSelectYear(),
+                        getCurrentMonthView().getSelectMonth(), getCurrentMonthView().getSelectDay());
+            }
         }
 
         @Override
