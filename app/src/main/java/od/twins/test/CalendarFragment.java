@@ -19,6 +19,7 @@ import com.jimmy.common.base.app.BaseFragment;
 import com.jimmy.common.bean.Schedule;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -27,9 +28,6 @@ import java.util.List;
  */
 public class CalendarFragment extends BaseFragment implements OnCalendarClickListener {
     private ScheduleLayout slSchedule;
-    private ScheduleRecyclerView rvScheduleList;
-    private ScheduleAdapter mScheduleAdapter;
-    private RelativeLayout rLNoTask;
     private int mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay;
     private TextView monthView;
     private ImageView leftView, rightView;
@@ -51,16 +49,14 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
 
     @Override
     protected void bindView() {
+        mMonthText = getResources().getStringArray(R.array.calendar_month);
         slSchedule = searchViewById(R.id.slSchedule);
-//        etInputContent = searchViewById(R.id.etInputContent);
-        rLNoTask = searchViewById(R.id.rlNoTask);
+        RelativeLayout rLNoTask = searchViewById(R.id.rlNoTask);
         rLNoTask.setVisibility(View.GONE);
         slSchedule.setOnCalendarClickListener(this);
-//        searchViewById(R.id.ibMainClock).setOnClickListener(this);
-//        searchViewById(R.id.ibMainOk).setOnClickListener(this);
         initScheduleList();
-//        initBottomInputBar();
         monthView = searchViewById(R.id.month_view);
+        monthView.setText(mMonthText[Calendar.getInstance().get(Calendar.MONTH)]);
         leftView = searchViewById(R.id.left_view);
         leftView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +71,10 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
                 slSchedule.onRightMove();
             }
         });
-        mMonthText = getResources().getStringArray(R.array.calendar_month);
     }
 
     private void initScheduleList() {
-        rvScheduleList = slSchedule.getSchedulerRecyclerView();
+        ScheduleRecyclerView rvScheduleList = slSchedule.getSchedulerRecyclerView();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvScheduleList.setLayoutManager(manager);
@@ -110,15 +105,16 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
         list.add(new Schedule());
         list.add(new Schedule());
         list.add(new Schedule());
-        mScheduleAdapter = new ScheduleAdapter(getContext(), list);
+        ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getContext(), list);
         rvScheduleList.setAdapter(mScheduleAdapter);
     }
 
     @Override
     public void onClickDate(int year, int month, int day, boolean b) {
-//        Toast.makeText(mActivity, "onClickDate: Day is " + day, Toast.LENGTH_SHORT).show();
-        setCurrentSelectDate(year, month, day);
-//        resetScheduleList();
+        mCurrentSelectYear = year;
+        mCurrentSelectMonth = month;
+        mCurrentSelectDay = day;
+        monthView.setText(mMonthText[month]);
     }
 
     @Override
@@ -130,12 +126,5 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
         list.add(20);
         list.add(23);
         slSchedule.setEventData(list);
-    }
-
-    private void setCurrentSelectDate(int year, int month, int day) {
-        mCurrentSelectYear = year;
-        mCurrentSelectMonth = month;
-        mCurrentSelectDay = day;
-        monthView.setText(mMonthText[month]);
     }
 }
