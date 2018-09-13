@@ -38,9 +38,9 @@ public class WeekCalendarView extends ViewPager implements OnWeekClickListener {
     }
 
     @Override
-    public void onClickDate(int year, int month, int day) {
+    public void onClickDate(int year, int month, int day, boolean isDraw) {
         if (mOnCalendarClickListener != null) {
-            mOnCalendarClickListener.onClickDate(year, month, day);
+            mOnCalendarClickListener.onClickDate(year, month, day, true);
         }
     }
 
@@ -57,7 +57,7 @@ public class WeekCalendarView extends ViewPager implements OnWeekClickListener {
                 if (mOnCalendarClickListener != null) {
                     mOnCalendarClickListener.onPageChange(weekView.getSelectYear(), weekView.getSelectMonth(), weekView.getSelectDay());
                 }
-                weekView.clickThisWeek(weekView.getSelectYear(), weekView.getSelectMonth(), weekView.getSelectDay());
+                weekView.clickThisWeek(weekView.getSelectYear(), weekView.getSelectMonth(), weekView.getSelectDay(), false);
             } else {
                 WeekCalendarView.this.postDelayed(new Runnable() {
                     @Override

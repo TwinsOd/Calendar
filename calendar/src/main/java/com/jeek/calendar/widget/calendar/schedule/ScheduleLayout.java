@@ -130,9 +130,9 @@ public class ScheduleLayout extends FrameLayout {
 
     private OnCalendarClickListener mMonthCalendarClickListener = new OnCalendarClickListener() {
         @Override
-        public void onClickDate(int year, int month, int day) {
-            Log.i("ScheduleLayout", "onClickDate, month = " + month);
-            Log.i("ScheduleLayout", "onPageChange, day = " + day);
+        public void onClickDate(int year, int month, int day, boolean isDraw) {
+            Log.i("ScheduleLayout", "onClickDate, day = " + day);
+            Log.i("ScheduleLayout", "onPageChange, isDraw = " + isDraw);
             wcvCalendar.setOnCalendarClickListener(null);
             int weeks = CalendarUtils.getWeeksAgo(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay, year, month, day);
             resetCurrentSelectDate(year, month, day);
@@ -142,7 +142,8 @@ public class ScheduleLayout extends FrameLayout {
             }
             resetWeekView(position);
             wcvCalendar.setOnCalendarClickListener(mWeekCalendarClickListener);
-            wcvCalendar.getCurrentWeekView().clickDate(year, month, day);
+            if (isDraw)
+                wcvCalendar.getCurrentWeekView().clickDate(year, month, day);
         }
 
         @Override
@@ -184,13 +185,13 @@ public class ScheduleLayout extends FrameLayout {
             wcvCalendar.setCurrentItem(position);
         }
         if (mOnCalendarClickListener != null) {
-            mOnCalendarClickListener.onClickDate(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay);
+            mOnCalendarClickListener.onClickDate(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay, false);
         }
     }
 
     private OnCalendarClickListener mWeekCalendarClickListener = new OnCalendarClickListener() {
         @Override
-        public void onClickDate(int year, int month, int day) {
+        public void onClickDate(int year, int month, int day, boolean b) {
             mcvCalendar.setOnCalendarClickListener(null);
             int months = CalendarUtils.getMonthsAgo(mCurrentSelectYear, mCurrentSelectMonth, year, month);
             resetCurrentSelectDate(year, month, day);
@@ -224,7 +225,7 @@ public class ScheduleLayout extends FrameLayout {
             monthView.invalidate();
         }
         if (mOnCalendarClickListener != null) {
-            mOnCalendarClickListener.onClickDate(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay);
+            mOnCalendarClickListener.onClickDate(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay, false);
         }
         resetCalendarPosition();
     }
@@ -518,7 +519,7 @@ public class ScheduleLayout extends FrameLayout {
                 }
             }, 50);
         } else {
-            mcvCalendar.getMonthViews().get(position).clickThisMonth(year, month, day);
+            mcvCalendar.getMonthViews().get(position).clickThisMonth(year, month, day, false);
         }
     }
 

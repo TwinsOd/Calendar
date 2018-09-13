@@ -41,9 +41,9 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     }
 
     @Override
-    public void onClickThisMonth(int year, int month, int day) {
+    public void onClickThisMonth(int year, int month, int day, boolean isDraw) {
         if (mOnCalendarClickListener != null) {
-            mOnCalendarClickListener.onClickDate(year, month, day);
+            mOnCalendarClickListener.onClickDate(year, month, day, isDraw);
         }
     }
 
@@ -63,7 +63,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
             monthDateView.setSelectYearMonth(year, month, day);
             monthDateView.invalidate();
         }
-        onClickThisMonth(year, month, day);
+        onClickThisMonth(year, month, day, false);
         setCurrentItem(getCurrentItem() + 1, true);
     }
 
@@ -81,7 +81,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         public void onPageSelected(final int position) {
             MonthView monthView = mMonthAdapter.getViews().get(getCurrentItem());
             if (monthView != null) {
-                monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), monthView.getSelectDay());
+                monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), monthView.getSelectDay(), false);
                 if (mOnCalendarClickListener != null) {
                     mOnCalendarClickListener.onPageChange(monthView.getSelectYear(), monthView.getSelectMonth(), monthView.getSelectDay());
                 }
@@ -108,7 +108,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         MonthView monthView = mMonthAdapter.getViews().get(mMonthAdapter.getMonthCount() / 2);
         if (monthView != null) {
             Calendar calendar = Calendar.getInstance();
-            monthView.clickThisMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+            monthView.clickThisMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), false);
         }
     }
 

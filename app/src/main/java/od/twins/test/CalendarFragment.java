@@ -115,7 +115,7 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
     }
 
     @Override
-    public void onClickDate(int year, int month, int day) {
+    public void onClickDate(int year, int month, int day, boolean b) {
 //        Toast.makeText(mActivity, "onClickDate: Day is " + day, Toast.LENGTH_SHORT).show();
         setCurrentSelectDate(year, month, day);
 //        resetScheduleList();

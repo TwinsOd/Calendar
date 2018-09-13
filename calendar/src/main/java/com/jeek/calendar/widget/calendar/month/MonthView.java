@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -306,7 +305,7 @@ public class MonthView extends View {
                     mDateClickListener.onClickLastMonth(clickYear, clickMonth, mDaysText[row][column]);
                 }
             } else {
-                clickThisMonth(clickYear, clickMonth, mDaysText[row][column]);
+                clickThisMonth(clickYear, clickMonth, mDaysText[row][column], true);
                 clickDate(clickYear, clickMonth, mDaysText[row][column]);
             }
         } else {
@@ -325,7 +324,7 @@ public class MonthView extends View {
                     mDateClickListener.onClickNextMonth(clickYear, clickMonth, mDaysText[row][column]);
                 }
             } else {
-                clickThisMonth(clickYear, clickMonth, mDaysText[row][column]);
+                clickThisMonth(clickYear, clickMonth, mDaysText[row][column], true);
                 clickDate(clickYear, clickMonth, mDaysText[row][column]);
             }
         }
@@ -337,10 +336,11 @@ public class MonthView extends View {
      * @param year
      * @param month
      * @param day
+     * @param b
      */
-    public void clickThisMonth(int year, int month, int day) {
+    public void clickThisMonth(int year, int month, int day, boolean isDraw) {
         if (mDateClickListener != null) {
-            mDateClickListener.onClickThisMonth(year, month, day);
+            mDateClickListener.onClickThisMonth(year, month, day, isDraw);
         }
         setSelectYearMonth(year, month, day);
         invalidate();

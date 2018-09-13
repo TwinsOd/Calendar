@@ -158,8 +158,6 @@ public class WeekView extends View {
     protected void onDraw(Canvas canvas) {
         initSize();
         drawThisWeek(canvas);
-        if (listEvent != null && listEvent.size() > 0)
-            drawEvent(canvas);
     }
 
     private void initSize() {
@@ -190,30 +188,16 @@ public class WeekView extends View {
                 mPaint.setColor(mSelectNowDayColor);
                 canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
                 mPaint.setColor(mSelectDayColor);
+            } else if (listEvent != null && listEvent.size() > 0 && listEvent.contains(day)) {
+                int startRecX = mColumnSize * i;
+                int endRecX = startRecX + mColumnSize;
+                mPaint.setColor(mSelectBGColor);
+                canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
+                mPaint.setColor(mSelectDayColor);
             } else {
                 mPaint.setColor(mNormalDayColor);
             }
             canvas.drawText(dayString, startX, startY, mPaint);
-        }
-    }
-
-    private void drawEvent(Canvas canvas) {
-        int startDayOfWeek = mStartDate.getDayOfMonth();
-        for (Integer integer : listEvent) {
-            if (integer >= startDayOfWeek && integer < (startDayOfWeek + 7)) {
-                int day = integer - startDayOfWeek;
-
-                int startRecX = mColumnSize * day;
-                int endRecX = startRecX + mColumnSize;
-                mPaint.setColor(mSelectBGColor);
-                canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
-
-                //draw text
-                int startX = (int) (mColumnSize * day + (mColumnSize - mPaint.measureText(String.valueOf(integer))) / 2);
-                int startY = (int) (mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
-                mPaint.setColor(mSelectDayColor);
-                canvas.drawText(String.valueOf(integer), startX, startY, mPaint);
-            }
         }
     }
 
@@ -240,13 +224,13 @@ public class WeekView extends View {
         int column = x / mColumnSize;
         column = Math.min(column, 6);
         DateTime date = mStartDate.plusDays(column);
-        clickThisWeek(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+        clickThisWeek(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth(), true);
         clickDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
     }
 
-    public void clickThisWeek(int year, int month, int day) {
+    public void clickThisWeek(int year, int month, int day, boolean isDraw) {
         if (mOnWeekClickListener != null) {
-            mOnWeekClickListener.onClickDate(year, month, day);
+            mOnWeekClickListener.onClickDate(year, month, day, isDraw);
         }
         setSelectYearMonth(year, month, day);
         invalidate();
