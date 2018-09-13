@@ -43,7 +43,7 @@ public class MonthView extends View {
     private OnMonthClickListener mDateClickListener;
     private GestureDetector mGestureDetector;
     private List<Integer> listEvent;
-    private boolean isClicked = false;
+    private int mClickYear, mClickMonth, mClickDay;
 
     public MonthView(Context context, int year, int month) {
         this(context, null, year, month);
@@ -74,8 +74,6 @@ public class MonthView extends View {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                isClicked = true;
-                Log.i("MonthView", "initGestureDetector:onSingleTapUp");
                 doClickAction((int) e.getX(), (int) e.getY());
                 return true;
             }
@@ -195,10 +193,10 @@ public class MonthView extends View {
             int startX = (int) (mColumnSize * col + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
 
-            if (!isClicked && (day + 1) == mSelDay)
+            if ((day + 1) == mSelDay)
                 mWeekRow = row + 1;
 
-            if ((day + 1) == mSelDay && isClicked) {
+            if ((day + 1) == mClickDay) {
                 int startRecX = mColumnSize * col;
                 int startRecY = mRowSize * row;
                 int endRecX = startRecX + mColumnSize;
@@ -206,7 +204,6 @@ public class MonthView extends View {
 
                 mPaint.setColor(mSelectBGColor);
                 canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2, mSelectCircleSize, mPaint);
-                mWeekRow = row + 1;
 
                 mPaint.setColor(mSelectDayColor);
             } else if ((day + 1) == mCurrDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
@@ -283,6 +280,12 @@ public class MonthView extends View {
         mSelDay = day;
     }
 
+    public void setClickYearMonth(int year, int month, int day) {
+        mClickYear = year;
+        mClickMonth = month;
+        mClickDay = day;
+    }
+
     private void doClickAction(int x, int y) {
         if (y > getHeight())
             return;
@@ -304,6 +307,7 @@ public class MonthView extends View {
                 }
             } else {
                 clickThisMonth(clickYear, clickMonth, mDaysText[row][column]);
+                clickDate(clickYear, clickMonth, mDaysText[row][column]);
             }
         } else {
             int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
@@ -322,6 +326,7 @@ public class MonthView extends View {
                 }
             } else {
                 clickThisMonth(clickYear, clickMonth, mDaysText[row][column]);
+                clickDate(clickYear, clickMonth, mDaysText[row][column]);
             }
         }
     }
@@ -338,6 +343,11 @@ public class MonthView extends View {
             mDateClickListener.onClickThisMonth(year, month, day);
         }
         setSelectYearMonth(year, month, day);
+        invalidate();
+    }
+
+    public void clickDate(int year, int month, int day) {
+        setClickYearMonth(year, month, day);
         invalidate();
     }
 

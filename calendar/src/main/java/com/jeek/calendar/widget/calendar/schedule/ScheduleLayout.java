@@ -39,9 +39,7 @@ public class ScheduleLayout extends FrameLayout {
     private RelativeLayout rlScheduleList;
     private ScheduleRecyclerView rvScheduleList;
 
-    private int mCurrentSelectYear;
-    private int mCurrentSelectMonth;
-    private int mCurrentSelectDay;
+    private int mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay;
     private int mRowSize;
     private int mMinDistance;
     private int mAutoScrollDistance;
@@ -144,6 +142,7 @@ public class ScheduleLayout extends FrameLayout {
             }
             resetWeekView(position);
             wcvCalendar.setOnCalendarClickListener(mWeekCalendarClickListener);
+            wcvCalendar.getCurrentWeekView().clickDate(year, month, day);
         }
 
         @Override
@@ -204,6 +203,7 @@ public class ScheduleLayout extends FrameLayout {
             if (mIsAutoChangeMonthRow) {
                 mCurrentRowsIsSix = CalendarUtils.getMonthRows(year, month) == 6;
             }
+            mcvCalendar.getCurrentMonthView().clickDate(year, month, day);
         }
 
         @Override
@@ -311,11 +311,11 @@ public class ScheduleLayout extends FrameLayout {
         return super.onTouchEvent(event);
     }
 
-    private void requestEventData(){
+    private void requestEventData() {
         Log.i("ScheduleLayout", "requestEventData _ mState = " + mState);
         if (mState == ScheduleState.CLOSE) {
             mOnCalendarClickListener.onPageChange(getWeekCalendar().getCurrentWeekView().getSelectYear(),
-                    getWeekCalendar().getCurrentWeekView().getSelectYear(),0);
+                    getWeekCalendar().getCurrentWeekView().getSelectYear(), 0);
         } else if (mState == ScheduleState.OPEN) {
             mOnCalendarClickListener.onPageChange(getMonthCalendar().getCurrentMonthView().getSelectYear(),
                     getMonthCalendar().getCurrentMonthView().getSelectMonth(), 0);

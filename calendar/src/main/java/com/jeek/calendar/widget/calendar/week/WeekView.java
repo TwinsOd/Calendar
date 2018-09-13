@@ -40,7 +40,7 @@ public class WeekView extends View {
     private OnWeekClickListener mOnWeekClickListener;
     private GestureDetector mGestureDetector;
     private List<Integer> listEvent;
-    private boolean isClicked = false;
+    private int mClickYear, mClickMonth, mClickDay;
 
     public WeekView(Context context, DateTime dateTime) {
         this(context, null, dateTime);
@@ -127,7 +127,6 @@ public class WeekView extends View {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                isClicked = true;
                 doClickAction((int) e.getX(), (int) e.getY());
                 return true;
             }
@@ -179,7 +178,7 @@ public class WeekView extends View {
             String dayString = String.valueOf(day);
             int startX = (int) (mColumnSize * i + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
-            if (day == mSelDay && isClicked) {
+            if (day == mClickDay) {
                 int startRecX = mColumnSize * i;
                 int endRecX = startRecX + mColumnSize;
                 mPaint.setColor(mSelectBGColor);
@@ -242,6 +241,7 @@ public class WeekView extends View {
         column = Math.min(column, 6);
         DateTime date = mStartDate.plusDays(column);
         clickThisWeek(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+        clickDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
     }
 
     public void clickThisWeek(int year, int month, int day) {
@@ -250,6 +250,17 @@ public class WeekView extends View {
         }
         setSelectYearMonth(year, month, day);
         invalidate();
+    }
+
+    public void clickDate(int year, int month, int day) {
+        setClickYearMonth(year, month, day);
+        invalidate();
+    }
+
+    public void setClickYearMonth(int year, int month, int day) {
+        mClickYear = year;
+        mClickMonth = month;
+        mClickDay = day;
     }
 
     public void setOnWeekClickListener(OnWeekClickListener onWeekClickListener) {
