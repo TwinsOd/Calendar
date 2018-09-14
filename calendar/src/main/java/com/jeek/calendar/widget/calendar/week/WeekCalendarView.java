@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.jeek.calendar.library.R;
@@ -39,8 +40,9 @@ public class WeekCalendarView extends ViewPager implements OnWeekClickListener {
 
     @Override
     public void onClickDate(int year, int month, int day, boolean isDraw) {
+        Log.i("WeekCalendarView", "onClickDate "  + isDraw );
         if (mOnCalendarClickListener != null) {
-            mOnCalendarClickListener.onClickDate(year, month, day, true);
+            mOnCalendarClickListener.onClickDate(year, month, day, isDraw);
         }
     }
 

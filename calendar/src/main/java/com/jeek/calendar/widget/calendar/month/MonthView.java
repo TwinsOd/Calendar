@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -196,6 +197,7 @@ public class MonthView extends View {
                 mWeekRow = row + 1;
 
             if ((day + 1) == mClickDay) {
+                Log.i("MonthView", "mClickDay = " + (day + 1));
                 int startRecX = mColumnSize * col;
                 int startRecY = mRowSize * row;
                 int endRecX = startRecX + mColumnSize;
@@ -206,6 +208,7 @@ public class MonthView extends View {
 
                 mPaint.setColor(mSelectDayColor);
             } else if ((day + 1) == mCurrDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
+                Log.i("MonthView", "mCurrDay = " + (day + 1));
                 int startRecX = mColumnSize * col;
                 int startRecY = mRowSize * row;
                 int endRecX = startRecX + mColumnSize;
@@ -223,9 +226,11 @@ public class MonthView extends View {
     }
 
     private void drawEvent(Canvas canvas) {
+        Log.i("MonthView", "drawEvent ********************************** " );
         int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
         for (Integer integer : listEvent) {
             int day = integer - 1;
+            Log.i("MonthView", "drawEvent = " + (day + 1));
             int col = (day + weekNumber - 1) % 7;
             int row = (day + weekNumber - 1) / 7;
             int startRecX = mColumnSize * col;
@@ -336,7 +341,7 @@ public class MonthView extends View {
      * @param year
      * @param month
      * @param day
-     * @param b
+     * @param isDraw
      */
     public void clickThisMonth(int year, int month, int day, boolean isDraw) {
         if (mDateClickListener != null) {

@@ -191,7 +191,8 @@ public class ScheduleLayout extends FrameLayout {
 
     private OnCalendarClickListener mWeekCalendarClickListener = new OnCalendarClickListener() {
         @Override
-        public void onClickDate(int year, int month, int day, boolean b) {
+        public void onClickDate(int year, int month, int day, boolean isDraw) {
+            Log.i("ScheduleLayout", "mWeekCalendarClickListener:onClickDate is " + isDraw);
             mcvCalendar.setOnCalendarClickListener(null);
             int months = CalendarUtils.getMonthsAgo(mCurrentSelectYear, mCurrentSelectMonth, year, month);
             resetCurrentSelectDate(year, month, day);
@@ -204,7 +205,8 @@ public class ScheduleLayout extends FrameLayout {
             if (mIsAutoChangeMonthRow) {
                 mCurrentRowsIsSix = CalendarUtils.getMonthRows(year, month) == 6;
             }
-            mcvCalendar.getCurrentMonthView().clickDate(year, month, day);
+            if (isDraw)
+                mcvCalendar.getCurrentMonthView().clickDate(year, month, day);
         }
 
         @Override
@@ -572,11 +574,20 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     public void onLeftMove() {
-        mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() - 1, true);
+        if (mState == ScheduleState.CLOSE) {
+            wcvCalendar.setCurrentItem(wcvCalendar.getCurrentItem() - 1, true);
+        } else if (mState == ScheduleState.OPEN) {
+            mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() - 1, true);
+        }
     }
 
     public void onRightMove() {
-        mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() + 1, true);
+//        mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() + 1, true);
+        if (mState == ScheduleState.CLOSE) {
+            wcvCalendar.setCurrentItem(wcvCalendar.getCurrentItem() + 1, true);
+        } else if (mState == ScheduleState.OPEN) {
+            mcvCalendar.setCurrentItem(mcvCalendar.getCurrentItem() + 1, true);
+        }
     }
 
 }

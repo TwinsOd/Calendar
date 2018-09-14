@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -188,7 +189,7 @@ public class WeekView extends View {
                 mPaint.setColor(mSelectNowDayColor);
                 canvas.drawCircle((startRecX + endRecX) / 2, mRowSize / 2, mSelectCircleSize, mPaint);
                 mPaint.setColor(mSelectDayColor);
-            } else if (listEvent != null && listEvent.size() > 0 && listEvent.contains(day)) {
+            } else if (listEvent != null && listEvent.size() > 0 && listEvent.contains(day)) {//need to check month !!!!!
                 int startRecX = mColumnSize * i;
                 int endRecX = startRecX + mColumnSize;
                 mPaint.setColor(mSelectBGColor);
@@ -219,6 +220,7 @@ public class WeekView extends View {
     }
 
     private void doClickAction(int x, int y) {
+        Log.i("WeekView", "doClickAction " );
         if (y > getHeight())
             return;
         int column = x / mColumnSize;
