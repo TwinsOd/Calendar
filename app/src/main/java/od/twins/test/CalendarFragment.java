@@ -1,6 +1,8 @@
 package od.twins.test;
 
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,8 +17,6 @@ import android.widget.TextView;
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
 import com.jeek.calendar.widget.calendar.schedule.ScheduleLayout;
 import com.jeek.calendar.widget.calendar.schedule.ScheduleRecyclerView;
-import com.jimmy.common.base.app.BaseFragment;
-import com.jimmy.common.bean.Schedule;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends BaseFragment implements OnCalendarClickListener {
+public class CalendarFragment extends Fragment implements OnCalendarClickListener {
     private ScheduleLayout slSchedule;
     private int mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay;
     private TextView monthView;
@@ -43,34 +43,32 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
 
     @Nullable
     @Override
-    protected View initContentView(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
-    }
-
-    @Override
-    protected void bindView() {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         mMonthText = getResources().getStringArray(R.array.calendar_month);
-        slSchedule = searchViewById(R.id.slSchedule);
-        RelativeLayout rLNoTask = searchViewById(R.id.rlNoTask);
+        slSchedule = view.findViewById(R.id.slSchedule);
+        RelativeLayout rLNoTask = view.findViewById(R.id.rlNoTask);
         rLNoTask.setVisibility(View.GONE);
         slSchedule.setOnCalendarClickListener(this);
         initScheduleList();
-        monthView = searchViewById(R.id.month_view);
+        monthView = view.findViewById(R.id.month_view);
         monthView.setText(mMonthText[Calendar.getInstance().get(Calendar.MONTH)]);
-        leftView = searchViewById(R.id.left_view);
+        leftView = view.findViewById(R.id.left_view);
         leftView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 slSchedule.onLeftMove();
             }
         });
-        rightView = searchViewById(R.id.right_view);
+        rightView = view.findViewById(R.id.right_view);
         rightView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 slSchedule.onRightMove();
             }
         });
+
+        return view;
     }
 
     private void initScheduleList() {
@@ -81,30 +79,23 @@ public class CalendarFragment extends BaseFragment implements OnCalendarClickLis
         DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
         itemAnimator.setSupportsChangeAnimations(false);
         rvScheduleList.setItemAnimator(itemAnimator);
-        List<Schedule> list = new ArrayList<>();
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
-        list.add(new Schedule());
+        List<String> list = new ArrayList<>();
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
+        list.add("");
         ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getContext(), list);
         rvScheduleList.setAdapter(mScheduleAdapter);
     }
